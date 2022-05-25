@@ -210,7 +210,7 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <Navbar sending={sending.length} />
+      <Navbar/>
 
       <div className='container'>
         <div className='grid grid-flow-row px-4'>
@@ -219,7 +219,7 @@ const Home: NextPage = () => {
             <h3>Instruction type</h3>
             <Select options={instructions}  onChange={(e: any)=>{setAddInstruction(e.value)}}/>
             {
-              addInstruction == "single-send" && <><Select options={allAssets} /></>
+              addInstruction == "single-send" && <Select options={allAssets} />
             }
           </div>
           <button className='border border-white '>+</button>

@@ -124,7 +124,7 @@ const Home: NextPage = () => {
 
     try {
       signed = await signTransaction(tx)
-    } catch (e) {
+    } catch (e: any) {
       toast(e.message)
       setTxState(transactionState.NONE)
       return
@@ -144,7 +144,7 @@ const Home: NextPage = () => {
       })
       setSending([])
       setTxState(transactionState.NONE)
-    } catch (e) {
+    } catch (e: any) {
       toast.error(e.message)
       setTxState(transactionState.NONE)
     }
@@ -207,7 +207,7 @@ const Home: NextPage = () => {
             )}
             <div className=''>
               {' '}
-              <label htmlFor='my-modal-3' className='bg-white rounded-lg  btn-ghost w-14 btn'>
+              <label htmlFor='my-modal-3' className='bg-white rounded-lg btn-ghost w-14 btn'>
                 <span>🛒</span>
               </label>
             </div>
@@ -263,7 +263,7 @@ const Home: NextPage = () => {
             ✕
           </label>
           {txState === transactionState.NONE && (
-            <>
+            <div>
               <h3 className='text-lg font-bold'>Send the NFS</h3>
               <div className="grid grid-flow-row gap-2 overflow-scroll">
                 {sending.length === 0 && (
@@ -341,20 +341,20 @@ const Home: NextPage = () => {
                 )}
 
               </div>{' '}
-            </>
+            </div>
           )}
           {txState === transactionState.SENDING && (
-            <>
+            
               <div className='lds-ripple'>
                 <div></div>
                 <div></div>
               </div>
-            </>
+            
           )}
           {txState === transactionState.DONE && (
-            <>
+            
               <h1>DONE!</h1>
-            </>
+            
           )}
         </div>
       </div>

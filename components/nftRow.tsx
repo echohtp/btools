@@ -14,7 +14,6 @@ export const NftRow = (props: NftRowProps) => {
 
     let amSelected = props.selected ? "online" : ""
   return (
-    <>
       <div className={'nftcard shadow stats hover:shadow-xl ' + hideme }   onClick={()=>{
           if (props.selected){
               props.unselect()
@@ -39,6 +38,5 @@ export const NftRow = (props: NftRowProps) => {
           </div>
         </div>
       </div>
-    </>
   )
 }

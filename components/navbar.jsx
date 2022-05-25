@@ -11,7 +11,7 @@ export const Navbar = () => {
   };
 
   return (
-    <>
+    
       <nav className='flex flex-wrap items-center p-3 '>
         <Link href='/'>
           <a className='inline-flex items-center p-2 mr-4 '>
@@ -68,6 +68,6 @@ export const Navbar = () => {
           </div>
         </div>
       </nav>
-    </>
+    
   );
 };
