@@ -124,7 +124,7 @@ const MultiSend: NextPage = () => {
 
     try {
       signed = await signTransaction(tx)
-    } catch (e) {
+    } catch (e: any) {
       toast(e.message)
       setTxState(transactionState.NONE)
       return
