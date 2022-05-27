@@ -72,7 +72,7 @@ export const Navbar = (props) => {
           <div className='flex flex-col items-start w-full lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto lg:items-center lg:h-auto'>
 
           {props.sending && 
-          <div className='inline-block mr-4 border border-black rounded-lg indicator'>
+          <div className='inline-block mr-4 border border-gray-400 rounded-lg indicator'>
                 {props.sending.length > 0 && (
                   <span className='indicator-item badge badge-secondary'>
                     {props.sending.length}
