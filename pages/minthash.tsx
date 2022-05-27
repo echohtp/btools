@@ -65,8 +65,9 @@ const MintHash: NextPage = () => {
         <div className='container'>
           <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {nfts.map(n => (
-                <div key={Math.random()}>
+                
               <NftRow
+                key={Math.random()}
                 name={n.name}
                 image={n.image}
                 unselect={() => {
@@ -76,7 +77,7 @@ const MintHash: NextPage = () => {
                   setSending([...sending, n])
                 }}
                 selected={sending.includes(n)}
-              /></div>
+              />
             ))}
           </div>
         </div>

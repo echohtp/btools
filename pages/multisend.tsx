@@ -187,82 +187,87 @@ const MultiSend: NextPage = () => {
 
   return (
     <div>
-    <Head>
-      <title>Mint Hash Getter</title>
-      <meta name='description' content='Send multiple NFTs at once!' />
-      <link rel='icon' href='/favicon.ico' />
-    </Head>
-    <div className='drawer drawer-end'>
-      <input id='my-drawer' type='checkbox' className='drawer-toggle' />
-      <div className='drawer-content'>
-        <Navbar sending={sending} />
+      <Head>
+        <title>Mint Hash Getter</title>
+        <meta name='description' content='Send multiple NFTs at once!' />
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
+      <div className='drawer drawer-end'>
+        <input id='my-drawer' type='checkbox' className='drawer-toggle' />
+        <div className='drawer-content'>
+          <Navbar sending={sending} />
 
-        <div className='container'>
-          <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-            {nfts.map(n => (
-              <div key={Math.random()}>
-              <NftRow
-                name={n.name}
-                image={n.image}
-                unselect={() => {
-                  setSending(sending.filter(item => item !== n))
-                }}
-                select={() => {
-                  setSending([...sending, n])
-                }}
-                selected={sending.includes(n)}
-              /></div>
-            ))}
+          <div className='container'>
+            <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+              {nfts.map(n => (
+                <NftRow
+                  key={Math.random()}
+                  name={n.name}
+                  image={n.image}
+                  unselect={() => {
+                    setSending(sending.filter(item => item !== n))
+                  }}
+                  select={() => {
+                    setSending([...sending, n])
+                  }}
+                  selected={sending.includes(n)}
+                />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className='drawer-side'>
-        <label htmlFor='my-drawer' className='drawer-overlay'></label>
-        <ul className='p-4 overflow-y-auto menu w-80 bg-base-100 text-base-content'>
-          {sending.map(n => (
-            <li key={Math.random()}>
-              <NftRow
-                name={n.name}
-                image={n.image}
-                unselect={() => {
-                  setSending(sending.filter(item => item !== n))
-                }}
-                select={() => {
-                  setSending([...sending, n])
-                }}
-                selected={sending.includes(n)}
-              />
-            </li>
-          ))}
-          
-          { (sending.length > 0) ?
-          <>
-          <li key={Math.random()}>
-          <input
-                type='text'
-                className='w-full max-w-xs input input-bordered'
-                placeholder='pubkey address'
-                onChange={e => {
-                  setTo(e.target.value)
-                }}
-              />
-          </li>
-          <li key={Math.random()}>
-            <button
-              id='btn-copy'
-              className='block text-white btn btn-primary'
-              onClick={() => {
-                massSend(sending, to)
-              }}
-            >
-              Send them off!
-            </button>
-          </li>
-          </> : <><li>Select some NFTs!</li></>}
-        </ul>
+        <div className='drawer-side'>
+          <label htmlFor='my-drawer' className='drawer-overlay'></label>
+          <ul className='p-4 overflow-y-auto menu w-80 bg-base-100 text-base-content'>
+            {sending.map(n => (
+              <li key={Math.random()}>
+                <NftRow
+                  name={n.name}
+                  image={n.image}
+                  unselect={() => {
+                    setSending(sending.filter(item => item !== n))
+                  }}
+                  select={() => {
+                    setSending([...sending, n])
+                  }}
+                  selected={sending.includes(n)}
+                />
+              </li>
+            ))}
+
+            {sending.length > 0 ? (
+              <>
+                <li key={Math.random()}>
+                  <input
+                    type='text'
+                    className='w-full max-w-xs input input-bordered'
+                    placeholder='pubkey address'
+                    onChange={e => {
+                      setTo(e.target.value)
+                    }}
+                  />
+                </li>
+                <li key={Math.random()}>
+                  <button
+                    id='btn-copy'
+                    className='block text-white btn btn-primary'
+                    onClick={() => {
+                      massSend(sending, to)
+                    }}
+                  >
+                    Send them off!
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>Select some NFTs!</li>
+              </>
+            )}
+          </ul>
+        </div>
       </div>
-    </div>
     </div>
   )
 }
