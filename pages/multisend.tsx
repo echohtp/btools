@@ -200,6 +200,7 @@ const MultiSend: NextPage = () => {
         <div className='container'>
           <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {nfts.map(n => (
+              <div key={Math.random()}>
               <NftRow
                 name={n.name}
                 image={n.image}
@@ -210,7 +211,7 @@ const MultiSend: NextPage = () => {
                   setSending([...sending, n])
                 }}
                 selected={sending.includes(n)}
-              />
+              /></div>
             ))}
           </div>
         </div>
@@ -220,7 +221,7 @@ const MultiSend: NextPage = () => {
         <label htmlFor='my-drawer' className='drawer-overlay'></label>
         <ul className='p-4 overflow-y-auto menu w-80 bg-base-100 text-base-content'>
           {sending.map(n => (
-            <li>
+            <li key={Math.random()}>
               <NftRow
                 name={n.name}
                 image={n.image}
@@ -237,7 +238,7 @@ const MultiSend: NextPage = () => {
           
           { (sending.length > 0) ?
           <>
-          <li>
+          <li key={Math.random()}>
           <input
                 type='text'
                 className='w-full max-w-xs input input-bordered'
@@ -247,7 +248,7 @@ const MultiSend: NextPage = () => {
                 }}
               />
           </li>
-                    <li>
+          <li key={Math.random()}>
             <button
               id='btn-copy'
               className='block text-white btn btn-primary'
