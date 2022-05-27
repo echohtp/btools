@@ -30,7 +30,7 @@ enum inputState {
   INVALID
 }
 
-const Home: NextPage = () => {
+const MultiSend: NextPage = () => {
   interface Nft {
     name: string
     address: string
@@ -63,7 +63,7 @@ const Home: NextPage = () => {
       } catch (e) {
         toast.error('Invalid address')
         setInputStatus(inputState.INVALID)
-        setTo("")
+        setTo('')
         return
       }
     }
@@ -124,7 +124,7 @@ const Home: NextPage = () => {
 
     try {
       signed = await signTransaction(tx)
-    } catch (e: any) {
+    } catch (e) {
       toast(e.message)
       setTxState(transactionState.NONE)
       return
@@ -144,7 +144,7 @@ const Home: NextPage = () => {
       })
       setSending([])
       setTxState(transactionState.NONE)
-    } catch (e: any) {
+    } catch (e) {
       toast.error(e.message)
       setTxState(transactionState.NONE)
     }
@@ -187,180 +187,83 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <Head>
-        <title>Multi Send</title>
-        <meta name='description' content='Send multiple NFTs at once!' />
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
+    <Head>
+      <title>Mint Hash Getter</title>
+      <meta name='description' content='Send multiple NFTs at once!' />
+      <link rel='icon' href='/favicon.ico' />
+    </Head>
+    <div className='drawer drawer-end'>
+      <input id='my-drawer' type='checkbox' className='drawer-toggle' />
+      <div className='drawer-content'>
+        <Navbar sending={sending} />
 
-      <Navbar />
-
-      <div className='container pl-4'>
-        <div className="w-full">
-          <div className='right-0'>
-        {connected && (
-          <div className='inline-block mr-4 indicator'>
-            {sending.length > 0 && (
-              <span className='indicator-item badge badge-secondary'>
-                {sending.length}
-              </span>
-            )}
-            <div className=''>
-              {' '}
-              <label htmlFor='my-modal-3' className='bg-white rounded-lg btn-ghost w-14 btn'>
-                <span>🛒</span>
-              </label>
-            </div>
-          </div>
-        )}
-          <div className='inline-block form-control'>
-            <label className='cursor-pointer label'>
-              <span className='label-text'>Show hidden</span>
-              <input type='checkbox' className='toggle' onChange={(e)=>{
-                if (e.target.checked){
-                  setShowHidden(true)
-                }else{
-                  setShowHidden(false)
-                }
-              }} />
-            </label>
+        <div className='container'>
+          <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+            {nfts.map(n => (
+              <NftRow
+                name={n.name}
+                image={n.image}
+                unselect={() => {
+                  setSending(sending.filter(item => item !== n))
+                }}
+                select={() => {
+                  setSending([...sending, n])
+                }}
+                selected={sending.includes(n)}
+              />
+            ))}
           </div>
         </div>
-        </div>
-        <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-          {nfts.map(e => (
-            <NftRow
-              showHidden={showHidden}
-              key={Math.random()}
-              image={e.image}
-              name={e.name}
-              unselect={() => {
-                setSending(sending.filter(item => item !== e))
-              }}
-              select={() => {
-                setSending([...sending, e])
-              }}
-              selected={sending.includes(e)}
-            />
+      </div>
+
+      <div className='drawer-side'>
+        <label htmlFor='my-drawer' className='drawer-overlay'></label>
+        <ul className='p-4 overflow-y-auto menu w-80 bg-base-100 text-base-content'>
+          {sending.map(n => (
+            <li>
+              <NftRow
+                name={n.name}
+                image={n.image}
+                unselect={() => {
+                  setSending(sending.filter(item => item !== n))
+                }}
+                select={() => {
+                  setSending([...sending, n])
+                }}
+                selected={sending.includes(n)}
+              />
+            </li>
           ))}
-        </div>
+          
+          { (sending.length > 0) ?
+          <>
+          <li>
+          <input
+                type='text'
+                className='w-full max-w-xs input input-bordered'
+                placeholder='pubkey address'
+                onChange={e => {
+                  setTo(e.target.value)
+                }}
+              />
+          </li>
+                    <li>
+            <button
+              id='btn-copy'
+              className='block text-white btn btn-primary'
+              onClick={() => {
+                massSend(sending, to)
+              }}
+            >
+              Send them off!
+            </button>
+          </li>
+          </> : <><li>Select some NFTs!</li></>}
+        </ul>
       </div>
-
-      <footer></footer>
-      {/* Send Modal */}
-      <input type='checkbox' id='my-modal-3' className='modal-toggle ' />
-      <div
-        className='modal'
-        onBlur={() => {
-          console.log('bye bye')
-        }}
-      >
-        <div className='relative modal-box'>
-          <label
-            htmlFor='my-modal-3'
-            className='absolute btn btn-sm btn-circle right-2 top-2'
-          >
-            ✕
-          </label>
-          {txState === transactionState.NONE && (
-            <div>
-              <h3 className='text-lg font-bold'>Send the NFS</h3>
-              <div className="grid grid-flow-row gap-2 overflow-scroll">
-                {sending.length === 0 && (
-                  <h1>Select some nfts to send fren!</h1>
-                )}
-                {sending.map(e => (
-                  <NftRow
-                  showHidden={showHidden}
-                  key={Math.random()}
-                  image={e.image}
-                  name={e.name}
-                  unselect={() => {
-                    setSending(sending.filter(item => item !== e))
-                  }}
-                  select={() => {
-                    setSending([...sending, e])
-                  }}
-                  selected={sending.includes(e)}
-                />
-                ))}
-                
-                {inputStatus == inputState.NONE && (
-                  <div className="input-group">
-                  <input type='text'
-                    className='w-full max-w-xs input input-bordered'
-                    placeholder='pubkey address'
-                    onChange={e => {
-                      setTo(e.target.value)
-                    }}/>
-                    <button
-                    className='btn btn-square'
-                    onClick={() => {
-                      massSend(sending, to)
-                    }}
-                  >
-                    🚀
-                  </button>
-                </div>
-                )}
-                {inputStatus == inputState.VALID && (
-                  <div className="input-group">
-                  <input type='text'
-                    className='w-full max-w-xs input input-bordered'
-                    placeholder='pubkey address'
-                    onChange={e => {
-                      setTo(e.target.value)
-                    }}/>
-                    <button
-                    className='btn btn-square'
-                    onClick={() => {
-                      massSend(sending, to)
-                    }}
-                  >
-                    🚀
-                  </button>
-                </div>
-                )}
-                {inputStatus == inputState.INVALID && (
-                  <div className="input-group">
-                  <input type='text'
-                    className='w-full max-w-xs input input-bordered'
-                    placeholder='pubkey address'
-                    onChange={e => {
-                      setTo(e.target.value)
-                    }}/>
-                    <button
-                    className='btn btn-square'
-                    onClick={() => {
-                      massSend(sending, to)
-                    }}
-                  >
-                    🚀
-                  </button>
-                </div>
-                )}
-
-              </div>{' '}
-            </div>
-          )}
-          {txState === transactionState.SENDING && (
-            
-              <div className='lds-ripple'>
-                <div></div>
-                <div></div>
-              </div>
-            
-          )}
-          {txState === transactionState.DONE && (
-            
-              <h1>DONE!</h1>
-            
-          )}
-        </div>
-      </div>
-      <ToastContainer position='bottom-center' />
+    </div>
     </div>
   )
 }
 
-export default Home
+export default MultiSend

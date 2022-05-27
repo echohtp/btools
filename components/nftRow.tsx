@@ -4,7 +4,7 @@ interface NftRowProps {
   select(): void
   unselect(): void
   selected: Boolean
-  showHidden: Boolean
+  showHidden?: Boolean
 }
 
 export const NftRow = (props: NftRowProps) => {

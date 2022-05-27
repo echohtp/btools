@@ -10,54 +10,7 @@ import client from '../client'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
-  const { publicKey, signTransaction } = useWallet()
-  const { connection } = useConnection()
 
-  const GET_NFTS = gql`
-    query GetNfts($owners: [PublicKey!], $limit: Int!, $offset: Int!) {
-      nfts(owners: $owners, limit: $limit, offset: $offset) {
-        address
-        mintAddress
-        name
-        description
-        image
-        owner {
-          address
-          associatedTokenAccountAddress
-        }
-      }
-    }
-  `
-
-  interface Nft {
-    name: string
-    address: string
-    description: string
-    image: string
-    mintAddress: string
-  }
-
-  const [nfts, setNfts] = useState<Nft[]>([])
-  const [allowed, setAllowed] = useState(false)
-  
-
-  useMemo(() => {
-    if (publicKey?.toBase58()) {
-      client
-        .query({
-          query: GET_NFTS,
-          variables: {
-            owners: [publicKey?.toBase58()],
-            offset: 0,
-            limit: 200
-          }
-        })
-        .then(res => setNfts(res.data.nfts))
-    } else {
-      setNfts([])
-      setAllowed(false)
-    }
-  }, [publicKey?.toBase58()])
 
   return (
     <div>
@@ -95,6 +48,11 @@ const Home: NextPage = () => {
           >
             <h2>Gated Entry &rarr;</h2>
             <p>Members only area, are you in, anon?</p>
+          </a>
+          
+          <a href="minthash" className={styles.card}>
+            <h2>Mint Hash Getter&rarr;</h2>
+            <p>Get your mint hash list here, anon!</p>
           </a>
 
         </div>

@@ -34,7 +34,7 @@ enum inputState {
   INVALID
 }
 
-const Home: NextPage = () => {
+const TXBuilder: NextPage = () => {
   interface Nft {
     name: string
     address: string
@@ -231,4 +231,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default TXBuilder

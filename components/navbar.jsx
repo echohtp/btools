@@ -3,7 +3,7 @@ import { WalletMultiButton, WalletDisconnectButton } from '@solana/wallet-adapte
 import Link from 'next/link';
 import { useState } from 'react';
 
-export const Navbar = () => {
+export const Navbar = (props) => {
   const [active, setActive] = useState(false);
 
   const handleClick = () => {
@@ -38,6 +38,12 @@ export const Navbar = () => {
               Gated Entry
             </button>
         </Link>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <Link href='minthash'>
+            <button className='font-bold tracking-wide uppercase'>
+              Mint Hash Getter
+            </button>
+        </Link>
         <button
           className='inline-flex p-3 ml-auto rounded outline-none lg:hidden'
           onClick={handleClick}
@@ -63,8 +69,28 @@ export const Navbar = () => {
             active ? '' : 'hidden'
           }   w-full lg:inline-flex lg:flex-grow lg:w-auto`}
         >
-          <div className='flex flex-col items-start w-full bg-black lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto lg:items-center lg:h-auto'>
-          <WalletMultiButton />
+          <div className='flex flex-col items-start w-full lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto lg:items-center lg:h-auto'>
+
+          {props.sending && 
+          <div className='inline-block mr-4 border border-black rounded-lg indicator'>
+                {props.sending.length > 0 && (
+                  <span className='indicator-item badge badge-secondary'>
+                    {props.sending.length}
+                  </span>
+                )}
+                <div className=''>
+                  {' '}
+                  <label
+                    htmlFor='my-drawer'
+                    className='bg-white rounded-lg btn-ghost w-14 btn'
+                  >
+                    <span>🛒</span>
+                  </label>
+                </div>
+              </div>
+            }
+
+          <div className="bg-black"><WalletMultiButton /></div>
           </div>
         </div>
       </nav>

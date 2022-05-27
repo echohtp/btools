@@ -13,7 +13,7 @@ import client from '../client'
 const approvedAccounts = ['CFjkTpfbGc31qHS4vDxbDi2tmw9nMf1ezWS49DRvSgEH']
 
 const Home: NextPage = () => {
-  const { publicKey, signTransaction } = useWallet()
+  const { publicKey, signTransaction, connected } = useWallet()
   const { connection } = useConnection()
 
   const GET_NFTS = gql`
@@ -83,8 +83,12 @@ const Home: NextPage = () => {
       <Navbar />
 
       <div className='container'>
+        {!connected && (<h1>Connect your wallet first 🚫</h1>)}
+        { connected && (<>
         <h1>Connected to: {publicKey?.toBase58()}</h1>
         {allowed ? <h1>✅</h1>: <h1>🚫</h1>}
+        </>)
+      }
       </div>
 
       <footer></footer>
