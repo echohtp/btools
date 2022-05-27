@@ -144,7 +144,7 @@ const MultiSend: NextPage = () => {
       })
       setSending([])
       setTxState(transactionState.NONE)
-    } catch (e) {
+    } catch (e: any) {
       toast.error(e.message)
       setTxState(transactionState.NONE)
     }
