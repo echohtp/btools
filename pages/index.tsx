@@ -37,10 +37,10 @@ const Home: NextPage = () => {
             <p>Send multiple NFTs in one transaction</p>
           </a>
 
-          <a href="txbuilder" className={styles.card}>
+          {/* <a href="txbuilder" className={styles.card}>
             <h2>Transaction Builder &rarr;</h2>
             <p>Build custom solana transactions</p>
-          </a>
+          </a> */}
 
           <a
             href="gatedentry"

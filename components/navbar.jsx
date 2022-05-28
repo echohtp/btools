@@ -131,7 +131,7 @@ export const Navbar = props => {
                   {' '}
                   <label
                     htmlFor='my-drawer'
-                    className='bg-white rounded-lg btn-ghost w-14 btn'
+                    className='bg-white rounded-lg w-14'
                   >
                     <span>🛒</span>
                   </label>
