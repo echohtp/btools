@@ -82,7 +82,7 @@ const Home: NextPage = () => {
 
       <Navbar />
 
-      <div className='container'>
+      <div className='container px-4'>
         {!connected && (<h1>Connect your wallet first 🚫</h1>)}
         { connected && (<>
         <h1>Connected to: {publicKey?.toBase58()}</h1>
