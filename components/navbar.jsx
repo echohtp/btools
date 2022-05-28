@@ -87,7 +87,7 @@ export const Navbar = props => {
             )}
           </ul>
         </div>
-        <a className='text-xl normal-case btn btn-ghost'>daisyUI</a>
+        <a className='text-xl normal-case btn btn-ghost'>🍌tools</a>
       </div>
       <div className='hidden navbar-center lg:flex'>
         <ul className='p-0 menu menu-horizontal'>
