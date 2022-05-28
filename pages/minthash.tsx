@@ -16,6 +16,7 @@ const MintHash: NextPage = () => {
     mintAddress: string
     name: string
     image: string
+    owner: any
   }
 
   const { publicKey, signTransaction, connected } = useWallet()
@@ -30,6 +31,9 @@ const MintHash: NextPage = () => {
         mintAddress
         name
         image
+        owner { 
+          address
+        }
       }
     }
   `
@@ -71,6 +75,7 @@ const MintHash: NextPage = () => {
             {nfts.filter((n)=>(n.name.includes(search))).map(n => (
                 
               <NftRow
+                owner={n.owner.address}
                 key={Math.random()}
                 name={n.name}
                 image={n.image}
