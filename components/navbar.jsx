@@ -44,13 +44,13 @@ export const Navbar = props => {
                 </button>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href='txbuilder'>
                 <button className='font-bold tracking-wide uppercase'>
                   TX Builder
                 </button>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href='gatedentry'>
                 <button className='font-bold tracking-wide uppercase'>
@@ -98,13 +98,13 @@ export const Navbar = props => {
               </button>
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link href='txbuilder'>
               <button className='font-bold tracking-wide uppercase'>
                 TX Builder
               </button>
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link href='gatedentry'>
               <button className='font-bold tracking-wide uppercase'>
