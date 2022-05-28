@@ -44,7 +44,7 @@ const MultiSend: NextPage = () => {
   const [nfts, setNfts] = useState<Nft[]>([])
   const [sending, setSending] = useState<Nft[]>([])
   const [to, setTo] = useState('')
-  const [showHidden, setShowHidden] = useState(false)
+  const [search, setSearch] = useState('')
   const [txState, setTxState] = useState<transactionState>(
     transactionState.NONE
   )
@@ -196,10 +196,13 @@ const MultiSend: NextPage = () => {
         <input id='my-drawer' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content'>
           <Navbar sending={sending} />
-
+          <div className='w-full mb-4'>
+            <input type="text" placeholder="Search..." className="w-full input input-bordered input-secondary" onChange={(e)=>(setSearch(e.target.value))} />
+          </div>
           <div className='container'>
+
             <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-              {nfts.map(n => (
+            {nfts.filter((n)=>(n.name.includes(search))).map(n => (
                 <NftRow
                   key={Math.random()}
                   name={n.name}

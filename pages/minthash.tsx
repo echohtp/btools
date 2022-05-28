@@ -22,6 +22,7 @@ const MintHash: NextPage = () => {
   const { connection } = useConnection()
   const [nfts, setNfts] = useState<Nft[]>([])
   const [sending, setSending] = useState<Nft[]>([])
+  const [search, setSearch] = useState<string>("")
 
   const GET_NFTS = gql`
     query GetNfts($creators: [PublicKey!], $limit: Int!, $offset: Int!) {
@@ -62,9 +63,12 @@ const MintHash: NextPage = () => {
       <div className='drawer-content'>
         <Navbar sending={sending} />
 
-        <div className='container'>
+        <div className='container px-4'>
+          <div className='w-full mb-4'>
+            <input type="text" placeholder="Search..." className="w-full input input-bordered input-secondary" onChange={(e)=>(setSearch(e.target.value))} />
+          </div>
           <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-            {nfts.map(n => (
+            {nfts.filter((n)=>(n.name.includes(search))).map(n => (
                 
               <NftRow
                 key={Math.random()}
