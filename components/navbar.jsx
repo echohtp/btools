@@ -14,13 +14,13 @@ export const Navbar = props => {
   }
 
   return (
-    <div class='navbar bg-base-100'>
-      <div class='navbar-start'>
-        <div class='dropdown'>
-          <label tabindex='0' class='btn btn-ghost lg:hidden'>
+    <div className='navbar bg-base-100'>
+      <div className='navbar-start'>
+        <div className='dropdown'>
+          <label tabindex='0' className='btn btn-ghost lg:hidden'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
-              class='h-5 w-5'
+              className='w-5 h-5'
               fill='none'
               viewBox='0 0 24 24'
               stroke='currentColor'
@@ -35,7 +35,7 @@ export const Navbar = props => {
           </label>
           <ul
             tabindex='0'
-            class='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52'
+            className='p-2 mt-3 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52'
           >
             <li>
               <Link href='multisend'>
@@ -87,10 +87,10 @@ export const Navbar = props => {
             )}
           </ul>
         </div>
-        <a class='btn btn-ghost normal-case text-xl'>daisyUI</a>
+        <a className='text-xl normal-case btn btn-ghost'>daisyUI</a>
       </div>
-      <div class='navbar-center hidden lg:flex'>
-        <ul class='menu menu-horizontal p-0'>
+      <div className='hidden navbar-center lg:flex'>
+        <ul className='p-0 menu menu-horizontal'>
           <li>
             <Link href='multisend'>
               <button className='font-bold tracking-wide uppercase'>
@@ -142,7 +142,7 @@ export const Navbar = props => {
           
         </ul>
       </div>
-      <div class='navbar-end'>
+      <div className='navbar-end'>
         <WalletMultiButton />
       </div>
     </div>
