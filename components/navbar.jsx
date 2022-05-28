@@ -143,7 +143,7 @@ export const Navbar = props => {
         </ul>
       </div>
       <div className='navbar-end'>
-        <WalletMultiButton />
+        <span className="bg-purple-600"><WalletMultiButton /></span>
       </div>
     </div>
   )
