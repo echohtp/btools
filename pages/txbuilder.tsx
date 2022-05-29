@@ -3,9 +3,14 @@ import Head from 'next/head'
 import { Navbar } from '../components/navbar'
 import { useMemo, useState } from 'react'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { Transaction, PublicKey } from '@solana/web3.js'
+import {
+  Transaction,
+  PublicKey,
+  TransactionInstruction,
+  SystemProgram,
+  LAMPORTS_PER_SOL
+} from '@solana/web3.js'
 import { gql } from '@apollo/client'
-import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import client from '../client'
 import {
@@ -15,12 +20,11 @@ import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   createTransferInstruction
 } from '@solana/spl-token'
-//@ts-ignore
-import CounterInput from "react-counter-input";
 import { NftCard } from '../components/nftCard'
 
 import React, { Component } from 'react'
 import Select from 'react-select'
+import { InstructionDrawerRow } from '../components/instructionDrawerRow'
 
 enum transactionState {
   NONE,
@@ -43,117 +47,99 @@ const TXBuilder: NextPage = () => {
     mintAddress: string
   }
 
+  interface InstructionDrawerRow {
+    name: string
+    to: string
+    amount?: string
+    instructions: TransactionInstruction[]
+  }
+
   const { publicKey, signTransaction, connected } = useWallet()
   const { connection } = useConnection()
   const [nfts, setNfts] = useState<Nft[]>([])
-  const [sending, setSending] = useState<Nft[]>([])
+  const [sending, setSending] = useState(-1)
+  const [tabSelected, setTabSelected] = useState(1)
   const [to, setTo] = useState('')
-  const [balance, setBalance] = useState(0)
-  const [sendAmount, setSendAmount] = useState(0)
-  const [singleAssetSend, setSingleAssetSend] = useState<Nft | undefined | string >()
-  const [addInstruction, setAddInstruction] = useState<string | undefined | null>("")
-  const [txState, setTxState] = useState<transactionState>(
-    transactionState.NONE
-  )
-  const [inputStatus, setInputStatus] = useState<inputState>(inputState.NONE) 
+  const [amount, setAmount] = useState('')
+  const [instructions, setInstructions] = useState<TransactionInstruction[]>([])
+  const [instructionsDrawer, setInstructionsDrawer] = useState<
+    InstructionDrawerRow[]
+  >([])
 
-  const massSend = async (list: Nft[], to: string) => {
-    if (to == ''){
-      alert("no dest")
+  const sendSolana = async (amount: string, to: string) => {
+    if (to == '') {
+      alert('no dest')
       return
-    }else{
+    } else {
       try {
         console.log('to: ', to)
         new PublicKey(to)
-        console.log('valid dest address: ', to)
-        setInputStatus(inputState.VALID)
-      } catch (e: any) {
-        console.log("invaid addres")
-        setInputStatus(inputState.INVALID)
+      } catch (e) {
+        console.log('Invalid address')
         return
       }
     }
 
-    if (!list || !connection || !publicKey || !signTransaction) {
-      console.log('returning')
+    if (!publicKey) return
+
+    return SystemProgram.transfer({
+      fromPubkey: publicKey,
+      toPubkey: new PublicKey(to),
+      lamports: Number(amount) * LAMPORTS_PER_SOL
+    })
+  }
+
+  const sendNft = async (nft: Nft, to: string) => {
+    if (to == '') {
+      alert('no dest')
       return
-    }
-    setTxState(transactionState.SENDING)
-
-    if (!list.length) {
-      console.log('probably want to select some nfts')
-      return
-    }
-
-    const tx = new Transaction()
-    console.log('trying to send ', list.length, ' nfts')
-    for (var i = 0; i < list.length; i++) {
-      const mintPublicKey = new PublicKey(list[i].mintAddress)
-      const fromTokenAccount = await getAssociatedTokenAddress(
-        mintPublicKey,
-        publicKey
-      )
-      const fromPublicKey = publicKey
-      const destPublicKey = new PublicKey(to)
-      const destTokenAccount = await getAssociatedTokenAddress(
-        mintPublicKey,
-        destPublicKey
-      )
-      const receiverAccount = await connection.getAccountInfo(destTokenAccount)
-
-      if (receiverAccount === null) {
-        tx.add(
-          createAssociatedTokenAccountInstruction(
-            fromPublicKey,
-            destTokenAccount,
-            destPublicKey,
-            mintPublicKey,
-            TOKEN_PROGRAM_ID,
-            ASSOCIATED_TOKEN_PROGRAM_ID
-          )
-        )
+    } else {
+      try {
+        console.log('to: ', to)
+        new PublicKey(to)
+      } catch (e) {
+        console.log('Invalid address')
+        return
       }
+    }
 
-      tx.add(
-        createTransferInstruction(
-          fromTokenAccount,
-          destTokenAccount,
+    if (!nft || !publicKey) return
+    let ret = []
+    const mintPublicKey = new PublicKey(nft.mintAddress)
+    const fromTokenAccount = await getAssociatedTokenAddress(
+      mintPublicKey,
+      publicKey
+    )
+    const fromPublicKey = publicKey
+    const destPublicKey = new PublicKey(to)
+    const destTokenAccount = await getAssociatedTokenAddress(
+      mintPublicKey,
+      destPublicKey
+    )
+    const receiverAccount = await connection.getAccountInfo(destTokenAccount)
+
+    if (receiverAccount === null) {
+      ret.push(
+        createAssociatedTokenAccountInstruction(
           fromPublicKey,
-          1
+          destTokenAccount,
+          destPublicKey,
+          mintPublicKey,
+          TOKEN_PROGRAM_ID,
+          ASSOCIATED_TOKEN_PROGRAM_ID
         )
       )
     }
-    tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
-    tx.feePayer = publicKey
 
-    let signed: Transaction | undefined = undefined
-
-    try {
-      signed = await signTransaction(tx)
-    } catch (e: any) {
-      toast(e.message)
-      setTxState(transactionState.NONE)
-      return
-    }
-
-    let signature: string | undefined = undefined
-
-    try {
-      signature = await connection.sendRawTransaction(signed.serialize())
-      await connection.confirmTransaction(signature, 'confirmed')
-
-      toast.success('Transaction successful')
-      // WE HAVE TO REFETCH WALLET DATA HERE
-      // for now remove them from the list
-      sending.map(n => {
-        setNfts(nfts.filter(n => !sending.includes(n)))
-      })
-      setSending([])
-      setTxState(transactionState.NONE)
-    } catch (e: any) {
-      toast.error(e.message)
-      setTxState(transactionState.NONE)
-    }
+    ret.push(
+      createTransferInstruction(
+        fromTokenAccount,
+        destTokenAccount,
+        fromPublicKey,
+        1
+      )
+    )
+    return ret
   }
 
   const GET_NFTS = gql`
@@ -180,53 +166,228 @@ const TXBuilder: NextPage = () => {
           variables: {
             owners: [publicKey?.toBase58()],
             offset: 0,
-            limit: 200
+            limit: 1000
           }
         })
         .then(res => setNfts(res.data.nfts))
-        .then(()=>connection.getBalance(publicKey))
-        .then((bal)=>setBalance(bal))
     } else {
       setNfts([])
-      
     }
   }, [publicKey?.toBase58()])
-
-
-
-  const instructions = [
-    { value: 'single-send', label: 'send a nft' },
-    { value: 'multi-send', label: 'send multiple nfts' }
-  ]
-
-
-  const allAssets = [...nfts.map((n)=>({value: n.mintAddress, label: n.name}))]
 
   return (
     <div>
       <Head>
-        <title>Multi Send</title>
-        <meta name='description' content='Send multiple NFTs at once!' />
+        <title>TX Builder</title>
+        <meta name='description' content='Build Some Transactions!' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
+      <div className='drawer drawer-end'>
+        <input id='my-drawer' type='checkbox' className='drawer-toggle' />
+        <div className='drawer-content'>
+          <Navbar sending={instructionsDrawer} />
 
-      <Navbar/>
+          <div className='container px-4'>
+            <div className='grid place-items-center'>
+              <div className='tabs'>
+                {tabSelected === 1 ? (
+                  <a
+                    className='tab tab-bordered tab-active'
+                    onClick={() => setTabSelected(1)}
+                  >
+                    Send NFT
+                  </a>
+                ) : (
+                  <a
+                    className='tab tab-bordered'
+                    onClick={() => setTabSelected(1)}
+                  >
+                    Send NFT
+                  </a>
+                )}
+                {tabSelected === 2 ? (
+                  <a
+                    className='tab tab-bordered tab-active'
+                    onClick={() => setTabSelected(2)}
+                  >
+                    Send Solana
+                  </a>
+                ) : (
+                  <a
+                    className='tab tab-bordered'
+                    onClick={() => setTabSelected(2)}
+                  >
+                    Send Solana
+                  </a>
+                )}
+                {tabSelected === 3 ? (
+                  <a
+                    className='tab tab-bordered tab-active'
+                    onClick={() => setTabSelected(3)}
+                  >
+                    Send SPL Token
+                  </a>
+                ) : (
+                  <a
+                    className='tab tab-bordered'
+                    onClick={() => setTabSelected(3)}
+                  >
+                    Send SPL Token
+                  </a>
+                )}
+              </div>
 
-      <div className='container'>
-        <div className='grid grid-flow-row px-4'>
+              {tabSelected === 1 && (
+                // SEND NFT TAB
+                <div className=''>
+                  <div className='w-full'>
+                  <Select
+                    options={nfts.map((n, i) => ({ value: i, label: n.name }))}
+                    onChange={e => {
+                      setSending(e?.value as number)
+                    }}
+                  />
+                  </div>
+                  <input
+                    type='text'
+                    placeholder='to'
+                    className='w-full input input-bordered input-secondary'
+                    onChange={e => setTo(e.target.value)}
+                  />
+                  <button
+                    className='block text-white btn btn-primary'
+                    onClick={async () => {
+                      const nftSend = await sendNft(nfts[sending], to)
+                      if (nftSend) {
+                        console.log([...instructions, ...nftSend])
+                        const n = setInstructions([...instructions, ...nftSend])
+                        setInstructionsDrawer([
+                          ...instructionsDrawer,
+                          { name: 'send-nft', to: to, instructions: nftSend }
+                        ])
+                      }
+                    }}
+                  >
+                    Add it
+                  </button>
+                </div>
+              )}
+              {tabSelected === 2 && (
+                // SEND SOLANA TAB
+                <div>
+                  <input
+                    type='text'
+                    placeholder='to'
+                    className='w-full input input-bordered input-secondary'
+                    onChange={e => setTo(e.target.value)}
+                  />
+                  <input
+                    type='text'
+                    placeholder='amount'
+                    className='w-full input input-bordered input-secondary'
+                    onChange={e => setAmount(e.target.value)}
+                  />
+                  <button
+                    className='block text-white btn btn-primary'
+                    onClick={async () => {
+                      const solSend = await sendSolana(amount, to)
+                      if (solSend) {
+                        console.log([...instructions, solSend])
+                        setInstructions([...instructions, solSend])
+                      }
+                    }}
+                  >
+                    Add it
+                  </button>
+                </div>
+              )}
+              {tabSelected === 3 && (
+                <div>
+                  <h1>Send SPL Token</h1>
+                  <h1>Coming soon</h1>
+                </div>
+              )}
+            </div>
 
-          <div className='py-4 border border-black border-rounded'>
-            <h3>Instruction type</h3>
-            <Select options={instructions}  onChange={(e: any)=>{setAddInstruction(e.value)}}/>
-            {
-              addInstruction == "single-send" && <Select options={allAssets} />
-            }
           </div>
-          <button className='border border-white '>+</button>
+        </div>
+        <div className='drawer-side'>
+          <label htmlFor='my-drawer' className='drawer-overlay'></label>
+          <ul className='p-4 overflow-y-auto menu w-80 bg-base-100 text-base-content'>
+            {instructionsDrawer.map(n => (
+              <li key={Math.random()}>
+                <InstructionDrawerRow
+                  name={n.name}
+                  to={n.to}
+                  unselect={() => {
+                    setInstructionsDrawer(
+                      instructionsDrawer.filter(item => item !== n)
+                    )
+                  }}
+                />
+              </li>
+            ))}
+
+            {instructionsDrawer.length > 0 ? (
+              <>
+                <li key={Math.random()}>
+                <button
+              className='block text-white btn btn-primary'
+              onClick={async () => {
+                if (
+                  instructions.length == 0 ||
+                  !connection ||
+                  !publicKey ||
+                  !signTransaction
+                ) {
+                  console.log('returning')
+                  return
+                }
+                const tx = new Transaction()
+                instructionsDrawer.map(i => {
+                  i.instructions.map((instruction) =>
+                    tx.add(instruction)
+                  )
+                })
+                tx.recentBlockhash = (
+                  await connection.getLatestBlockhash()
+                ).blockhash
+                tx.feePayer = publicKey
+
+                let signed: Transaction | undefined = undefined
+
+                try {
+                  signed = await signTransaction(tx)
+                } catch (e) {
+                  console.log(e.message)
+                  return
+                }
+
+                let signature: string | undefined = undefined
+
+                try {
+                  signature = await connection.sendRawTransaction(
+                    signed.serialize()
+                  )
+                  await connection.confirmTransaction(signature, 'confirmed')
+                  console.log('Transaction successful')
+                } catch (e) {
+                  console.log(e.message)
+                }
+              }}
+            >
+              Ship it
+            </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li key={Math.random()}>Add some actions!</li>
+              </>
+            )}
+          </ul>
         </div>
       </div>
-
-      <footer></footer>
     </div>
   )
 }
