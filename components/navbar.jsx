@@ -1,18 +1,11 @@
 import {
-  WalletMultiButton,
-  WalletDisconnectButton
+  WalletMultiButton
 } from '@solana/wallet-adapter-react-ui'
 
 import Link from 'next/link'
 import { useState } from 'react'
 
 export const Navbar = props => {
-  const [active, setActive] = useState(false)
-
-  const handleClick = () => {
-    setActive(!active)
-  }
-
   return (
     <div className='navbar bg-base-100'>
       <div className='navbar-start'>

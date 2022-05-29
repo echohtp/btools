@@ -20,23 +20,11 @@ import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   createTransferInstruction
 } from '@solana/spl-token'
-import { NftCard } from '../components/nftCard'
 
-import React, { Component } from 'react'
+import React from 'react'
 import Select from 'react-select'
 import { InstructionDrawerRow } from '../components/instructionDrawerRow'
 
-enum transactionState {
-  NONE,
-  SENDING,
-  DONE
-}
-
-enum inputState {
-  NONE,
-  VALID,
-  INVALID
-}
 
 const TXBuilder: NextPage = () => {
   interface Nft {

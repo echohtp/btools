@@ -1,12 +1,6 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import { Navbar } from '../components/navbar'
-import { useMemo, useState } from 'react'
-import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { LAMPORTS_PER_SOL, Transaction, PublicKey } from '@solana/web3.js'
-import { gql } from '@apollo/client'
-import client from '../client'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {

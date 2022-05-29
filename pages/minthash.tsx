@@ -3,12 +3,10 @@ import Head from 'next/head'
 import { Navbar } from '../components/navbar'
 import { useMemo, useState } from 'react'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { Transaction, PublicKey } from '@solana/web3.js'
 import { gql } from '@apollo/client'
-import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import client from '../client'
-import React, { Component } from 'react'
+import React from 'react'
 import { NftRow } from '../components/nftRow'
 
 const MintHash: NextPage = () => {

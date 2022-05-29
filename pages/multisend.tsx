@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { Transaction, PublicKey } from '@solana/web3.js'
 import { gql } from '@apollo/client'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import client from '../client'
 import {
@@ -15,19 +15,12 @@ import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   createTransferInstruction
 } from '@solana/spl-token'
-import { NftCard } from '../components/nftCard'
 import { NftRow } from '../components/nftRow'
 
 enum transactionState {
   NONE,
   SENDING,
   DONE
-}
-
-enum inputState {
-  NONE,
-  VALID,
-  INVALID
 }
 
 const MultiSend: NextPage = () => {
@@ -45,10 +38,6 @@ const MultiSend: NextPage = () => {
   const [sending, setSending] = useState<Nft[]>([])
   const [to, setTo] = useState('')
   const [search, setSearch] = useState('')
-  const [txState, setTxState] = useState<transactionState>(
-    transactionState.NONE
-  )
-  const [inputStatus, setInputStatus] = useState<inputState>(inputState.NONE)
 
   const massSend = async (list: Nft[], to: string) => {
     if (to == '') {
@@ -59,10 +48,8 @@ const MultiSend: NextPage = () => {
         console.log('to: ', to)
         new PublicKey(to)
         console.log('valid dest address: ', to)
-        setInputStatus(inputState.VALID)
       } catch (e) {
-        toast.error('Invalid address')
-        setInputStatus(inputState.INVALID)
+        console.log('Invalid address')
         setTo('')
         return
       }
@@ -72,7 +59,7 @@ const MultiSend: NextPage = () => {
       console.log('returning')
       return
     }
-    setTxState(transactionState.SENDING)
+    
 
     if (!list.length) {
       console.log('probably want to select some nfts')
@@ -126,7 +113,7 @@ const MultiSend: NextPage = () => {
       signed = await signTransaction(tx)
     } catch (e: any) {
       toast(e.message)
-      setTxState(transactionState.NONE)
+      
       return
     }
 
@@ -143,10 +130,10 @@ const MultiSend: NextPage = () => {
         setNfts(nfts.filter(n => !sending.includes(n)))
       })
       setSending([])
-      setTxState(transactionState.NONE)
+      
     } catch (e: any) {
       toast.error(e.message)
-      setTxState(transactionState.NONE)
+      
     }
   }
 
