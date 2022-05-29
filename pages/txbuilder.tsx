@@ -358,7 +358,7 @@ const TXBuilder: NextPage = () => {
 
                 try {
                   signed = await signTransaction(tx)
-                } catch (e) {
+                } catch (e: any) {
                   console.log(e.message)
                   return
                 }
@@ -371,7 +371,7 @@ const TXBuilder: NextPage = () => {
                   )
                   await connection.confirmTransaction(signature, 'confirmed')
                   console.log('Transaction successful')
-                } catch (e) {
+                } catch (e: any) {
                   console.log(e.message)
                 }
               }}
