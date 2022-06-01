@@ -9,6 +9,8 @@ import client from '../client'
 import React from 'react'
 import { NftRow } from '../components/nftRow'
 
+
+
 const MintHash: NextPage = () => {
   interface Nft {
     mintAddress: string
@@ -22,6 +24,26 @@ const MintHash: NextPage = () => {
   const [nfts, setNfts] = useState<Nft[]>([])
   const [sending, setSending] = useState<Nft[]>([])
   const [search, setSearch] = useState<string>("")
+
+  const downloadFile = (all: boolean = false) => {
+    const element = document.createElement('a')
+
+    let file
+
+    if (all)
+      file = new Blob([JSON.stringify(sending.map(n => n.owner.address))], {
+        type: 'text/json'
+      })
+    else
+      file = new Blob([JSON.stringify(nfts.map(n => n.owner.address))], {
+        type: 'text/json'
+      })
+
+    element.href = URL.createObjectURL(file)
+    element.download = publicKey?.toBase58() + '_holdersnapshot.json'
+    document.body.appendChild(element)
+    element.click()
+  }
 
   const GET_NFTS = gql`
     query GetNfts($creators: [PublicKey!], $limit: Int!, $offset: Int!) {
@@ -67,7 +89,12 @@ const MintHash: NextPage = () => {
 
         <div className='container px-4'>
           <div className='w-full mb-4'>
-            <input type="text" placeholder="Search..." className="w-full input input-bordered input-secondary" onChange={(e)=>(setSearch(e.target.value))} />
+            <input type="text" placeholder="Search..." className="w-[90%] input input-bordered input-secondary" onChange={(e)=>(setSearch(e.target.value))} /><button
+                className='inline-block text-white btn btn-primary'
+                onClick={()=>downloadFile(true)}
+              >
+                Get All
+              </button>
           </div>
           <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {nfts.filter((n)=>(n.name.includes(search))).map(n => (
