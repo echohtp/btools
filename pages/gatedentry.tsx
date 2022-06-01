@@ -50,7 +50,7 @@ const Home: NextPage = () => {
           variables: {
             owners: [publicKey?.toBase58()],
             offset: 0,
-            limit: 200
+            limit: 10000
           }
         })
         .then(res => setNfts(res.data.nfts))

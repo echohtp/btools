@@ -49,6 +49,11 @@ const Home: NextPage = () => {
             <p>Get your mint hash list here, anon!</p>
           </a>
 
+          <a href="holdersnapshot" className={styles.card}>
+            <h2>Holder Snapshot&rarr;</h2>
+            <p>Get your holder list here, anon!</p>
+          </a>
+
         </div>
       </main>
 

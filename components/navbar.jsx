@@ -45,6 +45,13 @@ export const Navbar = props => {
               </Link>
             </li>
             <li>
+              <Link href='nftminter'>
+                <button className='font-bold tracking-wide uppercase'>
+                  NFT Minter
+                </button>
+              </Link>
+            </li>
+            <li>
               <Link href='gatedentry'>
                 <button className='font-bold tracking-wide uppercase'>
                   Gated Entry
@@ -55,6 +62,13 @@ export const Navbar = props => {
               <Link href='minthash'>
                 <button className='font-bold tracking-wide uppercase'>
                   Mint Hash Getter
+                </button>
+              </Link>
+            </li>
+            <li>
+              <Link href='holdersnapshot'>
+                <button className='font-bold tracking-wide uppercase'>
+                  Holder Snapshot
                 </button>
               </Link>
             </li>
@@ -99,6 +113,13 @@ export const Navbar = props => {
             </Link>
           </li>
           <li>
+              <Link href='nftminter'>
+                <button className='font-bold tracking-wide uppercase'>
+                  NFT Minter
+                </button>
+              </Link>
+            </li>
+          <li>
             <Link href='gatedentry'>
               <button className='font-bold tracking-wide uppercase'>
                 Gated Entry
@@ -112,6 +133,13 @@ export const Navbar = props => {
               </button>
             </Link>
           </li>
+          <li>
+              <Link href='holdersnapshot'>
+                <button className='font-bold tracking-wide uppercase'>
+                  Holder Snapshot
+                </button>
+              </Link>
+            </li>
           {props.sending && (
             <li>
               <div className='inline-block mr-4 border border-gray-400 rounded-lg indicator'>

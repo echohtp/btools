@@ -13,6 +13,7 @@
   "dependencies": {
     "@apollo/client": "^3.6.0",
     "@metaplex-foundation/js-next": "^0.9.0",
+    "@metaplex/js": "^4.12.0",
     "@solana/buffer-layout": "^4.0.0",
     "@solana/spl-token": "^0.2.0",
     "@solana/spl-token-swap": "^0.1.2",
@@ -26,6 +27,7 @@
     "daisyui": "^2.15.1",
     "graphql": "^16.4.0",
     "next": "12.0.10",
+    "nft.storage": "^6.3.0",
     "p5": "^1.4.1",
     "postcss": "^8.4.12",
     "postcss-cli": "^9.1.0",
