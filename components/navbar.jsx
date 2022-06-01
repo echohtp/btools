@@ -31,42 +31,42 @@ export const Navbar = props => {
             className='p-2 mt-3 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52'
           >
             <li>
-              <Link href='multisend'>
+              <Link href='multisend' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   Multi Send
                 </button>
               </Link>
             </li>
             <li>
-              <Link href='txbuilder'>
+              <Link href='txbuilder' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   TX Builder
                 </button>
               </Link>
             </li>
             <li>
-              <Link href='nftminter'>
+              <Link href='nftminter' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   NFT Minter
                 </button>
               </Link>
             </li>
             <li>
-              <Link href='gatedentry'>
+              <Link href='gatedentry' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   Gated Entry
                 </button>
               </Link>
             </li>
             <li>
-              <Link href='minthash'>
+              <Link href='minthash' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   Mint Hash Getter
                 </button>
               </Link>
             </li>
             <li>
-              <Link href='holdersnapshot'>
+              <Link href='holdersnapshot' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   Holder Snapshot
                 </button>
@@ -99,42 +99,42 @@ export const Navbar = props => {
       <div className='hidden navbar-center lg:flex'>
         <ul className='p-0 menu menu-horizontal'>
           <li>
-            <Link href='multisend'>
+            <Link href='multisend' passHref>
               <button className='font-bold tracking-wide uppercase'>
                 Multi Send
               </button>
             </Link>
           </li>
           <li>
-            <Link href='txbuilder'>
+            <Link href='txbuilder' passHref>
               <button className='font-bold tracking-wide uppercase'>
                 TX Builder
               </button>
             </Link>
           </li>
           <li>
-              <Link href='nftminter'>
+              <Link href='nftminter' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   NFT Minter
                 </button>
               </Link>
             </li>
           <li>
-            <Link href='gatedentry'>
+            <Link href='gatedentry' passHref>
               <button className='font-bold tracking-wide uppercase'>
                 Gated Entry
               </button>
             </Link>
           </li>
           <li>
-            <Link href='minthash'>
+            <Link href='minthash' passHref>
               <button className='font-bold tracking-wide uppercase'>
                 Mint Hash Getter
               </button>
             </Link>
           </li>
           <li>
-              <Link href='holdersnapshot'>
+              <Link href='holdersnapshot' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   Holder Snapshot
                 </button>
