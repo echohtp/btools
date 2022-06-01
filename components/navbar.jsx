@@ -72,27 +72,28 @@ export const Navbar = props => {
             </li>
             {props.sending && (
               <li>
-                <div className='inline-block mr-4 border border-gray-400 rounded-lg indicator'>
-                  {props.sending.length > 0 && (
-                    <span className='indicator-item badge badge-secondary'>
-                      {props.sending.length}
-                    </span>
-                  )}
-                  <div className=''>
-                    {' '}
-                    <label
-                      htmlFor='my-drawer'
-                      className='bg-white rounded-lg btn-ghost w-14 btn'
-                    >
+                <label htmlFor='my-drawer' className=''>
+                  <div className='mr-4 rounded-lg indicator'>
+                    {props.sending.length > 0 && (
+                      <span className='indicator-item badge badge-secondary'>
+                        {props.sending.length}
+                      </span>
+                    )}
+                    <div className=''>
                       <span>🛒</span>
-                    </label>
+                    </div>
                   </div>
-                </div>
+                </label>
               </li>
             )}
+            <li>
+              <WalletMultiButton />
+            </li>
           </ul>
         </div>
-        <a className='text-xl normal-case btn btn-ghost'>🍌tools</a>
+        <Link href='/' passHref>
+          <a className='text-xl normal-case btn btn-ghost'>🍌tools</a>
+        </Link>
       </div>
       <div className='hidden navbar-center lg:flex'>
         <ul className='p-0 menu menu-horizontal'>
@@ -140,30 +141,24 @@ export const Navbar = props => {
           </li>
           {props.sending && (
             <li>
-              <div className='inline-block mr-4 border border-gray-400 rounded-lg indicator'>
-                {props.sending.length > 0 && (
-                  <span className='indicator-item badge badge-secondary'>
-                    {props.sending.length}
-                  </span>
-                )}
-                <div className=''>
-                  {' '}
-                  <label
-                    htmlFor='my-drawer'
-                    className='bg-white rounded-lg w-14'
-                  >
+              <label htmlFor='my-drawer'>
+                <div className='inline-block rounded-lg indicator'>
+                  {props.sending.length > 0 && (
+                    <span className='indicator-item badge badge-secondary'>
+                      {props.sending.length}
+                    </span>
+                  )}
+                  <div className=''>
                     <span>🛒</span>
-                  </label>
+                  </div>
                 </div>
-              </div>
+              </label>
             </li>
           )}
+          <li>
+            <WalletMultiButton />
+          </li>
         </ul>
-      </div>
-      <div className='navbar-end'>
-        <span className='bg-purple-600'>
-          <WalletMultiButton />
-        </span>
       </div>
     </div>
   )

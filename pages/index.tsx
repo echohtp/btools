@@ -21,9 +21,9 @@ const Home: NextPage = () => {
           Welcome to 🍌 tools
         </h1>
 
-        <p className={styles.description}>
+        {/* <p className={styles.description}>
           Get started by checking out our tools below<br/>
-        </p>
+        </p> */}
 
         <div className={styles.grid}>
           <a href="multisend" className={styles.card}>
@@ -53,6 +53,11 @@ const Home: NextPage = () => {
             <h2>Holder Snapshot&rarr;</h2>
             <p>Get your holder list here, anon!</p>
           </a>
+          
+          {/* <a href="resources" className={styles.card}>
+            <h2>Solana Web3 Resources&rarr;</h2>
+            <p>My bookmarks</p>
+          </a> */}
 
         </div>
       </main>
