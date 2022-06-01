@@ -154,19 +154,7 @@ const MintHash: NextPage = () => {
           <li key={Math.random()}>
             <button
               className='block text-white btn btn-primary'
-              onClick={() => {
-                const element = document.createElement('a')
-                const file = new Blob(
-                  [JSON.stringify(sending.map(n => n.mintAddress))],
-                  {
-                    type: 'text/json'
-                  }
-                )
-                element.href = URL.createObjectURL(file)
-                element.download = publicKey?.toBase58() + '_minthash.json'
-                document.body.appendChild(element)
-                element.click()
-              }}
+              onClick={() => downloadFile()}
             >
               Download JSON File
             </button>
