@@ -1,6 +1,4 @@
-import {
-  WalletMultiButton
-} from '@solana/wallet-adapter-react-ui'
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 
 import Link from 'next/link'
 import { useState } from 'react'
@@ -44,13 +42,13 @@ export const Navbar = props => {
                 </button>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href='nftminter' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   NFT Minter
                 </button>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href='gatedentry' passHref>
                 <button className='font-bold tracking-wide uppercase'>
@@ -112,13 +110,13 @@ export const Navbar = props => {
               </button>
             </Link>
           </li>
-          <li>
-              <Link href='nftminter' passHref>
-                <button className='font-bold tracking-wide uppercase'>
-                  NFT Minter
-                </button>
-              </Link>
-            </li>
+          {/* <li>
+            <Link href='nftminter' passHref>
+              <button className='font-bold tracking-wide uppercase'>
+                NFT Minter
+              </button>
+            </Link>
+          </li> */}
           <li>
             <Link href='gatedentry' passHref>
               <button className='font-bold tracking-wide uppercase'>
@@ -134,12 +132,12 @@ export const Navbar = props => {
             </Link>
           </li>
           <li>
-              <Link href='holdersnapshot' passHref>
-                <button className='font-bold tracking-wide uppercase'>
-                  Holder Snapshot
-                </button>
-              </Link>
-            </li>
+            <Link href='holdersnapshot'>
+              <button className='font-bold tracking-wide uppercase'>
+                Holder Snapshot
+              </button>
+            </Link>
+          </li>
           {props.sending && (
             <li>
               <div className='inline-block mr-4 border border-gray-400 rounded-lg indicator'>
@@ -160,11 +158,12 @@ export const Navbar = props => {
               </div>
             </li>
           )}
-          
         </ul>
       </div>
       <div className='navbar-end'>
-        <span className="bg-purple-600"><WalletMultiButton /></span>
+        <span className='bg-purple-600'>
+          <WalletMultiButton />
+        </span>
       </div>
     </div>
   )
