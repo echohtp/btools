@@ -8,13 +8,9 @@ import { gql } from '@apollo/client'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import client from '../client'
-import {
-  createAssociatedTokenAccountInstruction,
-  getAssociatedTokenAddress,
-  TOKEN_PROGRAM_ID,
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  createTransferInstruction
-} from '@solana/spl-token'
+
+//@ts-ignore
+import { createAssociatedTokenAccountInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, createTransferInstruction } from '@solana/spl-token'
 import { NftRow } from '../components/nftRow'
 import * as ga from '../lib/ga'
 
@@ -111,7 +107,7 @@ const MultiSend: NextPage = () => {
 
     try {
       signed = await signTransaction(tx)
-    } catch (e) {
+    } catch (e: any) {
       toast(e.message)
 
       return
@@ -132,7 +128,7 @@ const MultiSend: NextPage = () => {
         setNfts(nfts.filter(n => !sending.includes(n)))
       })
       setSending([])
-    } catch (e) {
+    } catch (e: any) {
       toast.error(e.message)
       ga.event({
         action: 'multisend_error',

@@ -13,13 +13,8 @@ import {
 import { gql } from '@apollo/client'
 import 'react-toastify/dist/ReactToastify.css'
 import client from '../client'
-import {
-  createAssociatedTokenAccountInstruction,
-  getAssociatedTokenAddress,
-  TOKEN_PROGRAM_ID,
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  createTransferInstruction
-} from '@solana/spl-token'
+//@ts-ignore
+import { createAssociatedTokenAccountInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, createTransferInstruction } from '@solana/spl-token'
 
 import React from 'react'
 import Select from 'react-select'
