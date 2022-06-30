@@ -16,6 +16,7 @@ import {
   createTransferInstruction
 } from '@solana/spl-token'
 import { NftRow } from '../components/nftRow'
+import * as ga from '../lib/ga'
 
 enum transactionState {
   NONE,
@@ -59,7 +60,6 @@ const MultiSend: NextPage = () => {
       console.log('returning')
       return
     }
-    
 
     if (!list.length) {
       console.log('probably want to select some nfts')
@@ -111,9 +111,9 @@ const MultiSend: NextPage = () => {
 
     try {
       signed = await signTransaction(tx)
-    } catch (e: any) {
+    } catch (e) {
       toast(e.message)
-      
+
       return
     }
 
@@ -124,16 +124,20 @@ const MultiSend: NextPage = () => {
       await connection.confirmTransaction(signature, 'confirmed')
 
       toast.success('Transaction successful')
-      // WE HAVE TO REFETCH WALLET DATA HERE
-      // for now remove them from the list
+      ga.event({
+        action: 'multisend_success',
+        params: { count: sending.length }
+      })
       sending.map(n => {
         setNfts(nfts.filter(n => !sending.includes(n)))
       })
       setSending([])
-      
-    } catch (e: any) {
+    } catch (e) {
       toast.error(e.message)
-      
+      ga.event({
+        action: 'multisend_error',
+        params: { msg: e.message }
+      })
     }
   }
 
@@ -175,7 +179,7 @@ const MultiSend: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Mint Hash Getter</title>
+        <title>Multi-Send</title>
         <meta name='description' content='Send multiple NFTs at once!' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
@@ -184,25 +188,31 @@ const MultiSend: NextPage = () => {
         <div className='drawer-content'>
           <Navbar sending={sending} />
           <div className='w-full mb-4'>
-            <input type="text" placeholder="Search..." className="w-full input input-bordered input-secondary" onChange={(e)=>(setSearch(e.target.value))} />
+            <input
+              type='text'
+              placeholder='Search...'
+              className='w-full input input-bordered input-secondary'
+              onChange={e => setSearch(e.target.value)}
+            />
           </div>
           <div className='container px-4'>
-
             <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-            {nfts.filter((n)=>(n.name.includes(search))).map(n => (
-                <NftRow
-                  key={Math.random()}
-                  name={n.name}
-                  image={n.image}
-                  unselect={() => {
-                    setSending(sending.filter(item => item !== n))
-                  }}
-                  select={() => {
-                    setSending([...sending, n])
-                  }}
-                  selected={sending.includes(n)}
-                />
-              ))}
+              {nfts
+                .filter(n => n.name.includes(search))
+                .map(n => (
+                  <NftRow
+                    key={Math.random()}
+                    name={n.name}
+                    image={n.image}
+                    unselect={() => {
+                      setSending(sending.filter(item => item !== n))
+                    }}
+                    select={() => {
+                      setSending([...sending, n])
+                    }}
+                    selected={sending.includes(n)}
+                  />
+                ))}
             </div>
           </div>
         </div>
