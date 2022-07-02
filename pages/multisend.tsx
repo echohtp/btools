@@ -8,26 +8,16 @@ import { gql } from '@apollo/client'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import client from '../client'
+import { Button } from 'antd'
 
 //@ts-ignore
-import { createAssociatedTokenAccountInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, createTransferInstruction } from '@solana/spl-token'
+import { createAssociatedTokenAccountInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, createTransferInstruction} from '@solana/spl-token'
 import { NftRow } from '../components/nftRow'
 import * as ga from '../lib/ga'
 
-enum transactionState {
-  NONE,
-  SENDING,
-  DONE
-}
+import {Nft} from '../types'
 
 const MultiSend: NextPage = () => {
-  interface Nft {
-    name: string
-    address: string
-    description: string
-    image: string
-    mintAddress: string
-  }
 
   const { publicKey, signTransaction, connected } = useWallet()
   const { connection } = useConnection()
@@ -35,10 +25,13 @@ const MultiSend: NextPage = () => {
   const [sending, setSending] = useState<Nft[]>([])
   const [to, setTo] = useState('')
   const [search, setSearch] = useState('')
+  const [loading, setLoading] = useState<boolean>(false)
 
   const massSend = async (list: Nft[], to: string) => {
+    setLoading(true)
     if (to == '') {
-      alert('no dest')
+      toast.error('no dest')
+      setLoading(false)
       return
     } else {
       try {
@@ -48,17 +41,20 @@ const MultiSend: NextPage = () => {
       } catch (e) {
         console.log('Invalid address')
         setTo('')
+        setLoading(false)
         return
       }
     }
 
     if (!list || !connection || !publicKey || !signTransaction) {
       console.log('returning')
+      setLoading(false)
       return
     }
 
     if (!list.length) {
       console.log('probably want to select some nfts')
+      setLoading(false)
       return
     }
 
@@ -109,7 +105,7 @@ const MultiSend: NextPage = () => {
       signed = await signTransaction(tx)
     } catch (e: any) {
       toast(e.message)
-
+      setLoading(false)
       return
     }
 
@@ -128,8 +124,10 @@ const MultiSend: NextPage = () => {
         setNfts(nfts.filter(n => !sending.includes(n)))
       })
       setSending([])
+      setLoading(false)
     } catch (e: any) {
       toast.error(e.message)
+      setLoading(false)
       ga.event({
         action: 'multisend_error',
         params: { msg: e.message }
@@ -194,7 +192,7 @@ const MultiSend: NextPage = () => {
           <div className='container px-4'>
             <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
               {nfts
-                .filter(n => n.name.includes(search))
+                .filter(n => n.name.toLowerCase().includes(search.toLowerCase()))
                 .map(n => (
                   <NftRow
                     key={Math.random()}
@@ -245,15 +243,19 @@ const MultiSend: NextPage = () => {
                   />
                 </li>
                 <li key={Math.random()}>
-                  <button
+                  <Button
+                    loading={loading}
                     id='btn-copy'
-                    className='block text-white btn btn-primary'
+                    type='primary'
+                    className='block btn btn-secondary hover:text-white'
                     onClick={() => {
+                      // setLoading(true)
                       massSend(sending, to)
+                      // setLoading(false)
                     }}
                   >
                     Send them off!
-                  </button>
+                  </Button>
                 </li>
               </>
             ) : (

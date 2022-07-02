@@ -3,52 +3,39 @@ import Head from 'next/head'
 import { Navbar } from '../components/navbar'
 import { useMemo, useState } from 'react'
 //@ts-ignore
-import {  TOKEN_PROGRAM_ID,  createBurnInstruction, createCloseAccountInstruction } from '@solana/spl-token'
+import { TOKEN_PROGRAM_ID, createBurnInstruction, createCloseAccountInstruction} from '@solana/spl-token'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { Transaction, PublicKey } from '@solana/web3.js'
 import { gql } from '@apollo/client'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import client from '../client'
+import { Button } from 'antd'
 
 import { NftRow } from '../components/nftRow'
 import * as ga from '../lib/ga'
-
-enum transactionState {
-  NONE,
-  SENDING,
-  DONE
-}
+import { Nft } from '../types'
 
 const Burn: NextPage = () => {
-  interface Owner {
-    address: string
-    associatedTokenAccountAddress: string
-  }
-  interface Nft {
-    name: string
-    address: string
-    description: string
-    image: string
-    mintAddress: string
-    owner: Owner
-  }
-
   const { publicKey, signTransaction, connected } = useWallet()
   const { connection } = useConnection()
   const [nfts, setNfts] = useState<Nft[]>([])
   const [sending, setSending] = useState<Nft[]>([])
   const [to, setTo] = useState('')
   const [search, setSearch] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const burn = async (list: Nft[]) => {
+    setLoading(true)
     if (!list || !connection || !publicKey || !signTransaction) {
       console.log('returning')
+      setLoading(false)
       return
     }
 
     if (!list.length) {
       console.log('probably want to select some nfts')
+      setLoading(false)
       return
     }
 
@@ -84,7 +71,7 @@ const Burn: NextPage = () => {
       signed = await signTransaction(tx)
     } catch (e: any) {
       toast(e.message)
-
+      setLoading(false)
       return
     }
 
@@ -103,8 +90,10 @@ const Burn: NextPage = () => {
         setNfts(nfts.filter(n => !sending.includes(n)))
       })
       setSending([])
+      setLoading(false)
     } catch (e: any) {
       toast.error(e.message)
+      setLoading(false)
       ga.event({
         action: 'burn_error',
         params: { msg: e.message }
@@ -169,7 +158,7 @@ const Burn: NextPage = () => {
           <div className='container px-4'>
             <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
               {nfts
-                .filter(n => n.name.includes(search))
+                .filter(n => n.name.toLowerCase().includes(search.toLowerCase()))
                 .map(n => (
                   <NftRow
                     key={Math.random()}
@@ -210,15 +199,17 @@ const Burn: NextPage = () => {
             {sending.length > 0 ? (
               <>
                 <li key={Math.random()}>
-                  <button
+                  <Button
+                    loading={loading}
                     id='btn-copy'
-                    className='block text-white btn btn-primary'
+                    type='primary'
+                    className='block btn btn-secondary hover:text-white'
                     onClick={() => {
                       burn(sending)
                     }}
                   >
                     Burn them!
-                  </button>
+                  </Button>
                 </li>
               </>
             ) : (

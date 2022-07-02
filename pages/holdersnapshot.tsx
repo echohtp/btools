@@ -102,7 +102,7 @@ const HolderSnapshot: NextPage = () => {
             </div>
             <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
               {nfts
-                .filter(n => n.name.includes(search))
+                .filter(n => n.name.toLowerCase().includes(search.toLowerCase()))
                 .map(n => (
                   <NftRow
                     owner={n.owner.address}
