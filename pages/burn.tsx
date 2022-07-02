@@ -41,7 +41,7 @@ const Burn: NextPage = () => {
   const [to, setTo] = useState('')
   const [search, setSearch] = useState('')
 
-  const massSend = async (list: Nft[]) => {
+  const burn = async (list: Nft[]) => {
     if (!list || !connection || !publicKey || !signTransaction) {
       console.log('returning')
       return
@@ -214,7 +214,7 @@ const Burn: NextPage = () => {
                     id='btn-copy'
                     className='block text-white btn btn-primary'
                     onClick={() => {
-                      massSend(sending, to)
+                      burn(sending)
                     }}
                   >
                     Burn them!
