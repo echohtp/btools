@@ -82,7 +82,7 @@ const Burn: NextPage = () => {
 
     try {
       signed = await signTransaction(tx)
-    } catch (e) {
+    } catch (e: any) {
       toast(e.message)
 
       return
@@ -103,7 +103,7 @@ const Burn: NextPage = () => {
         setNfts(nfts.filter(n => !sending.includes(n)))
       })
       setSending([])
-    } catch (e) {
+    } catch (e: any) {
       toast.error(e.message)
       ga.event({
         action: 'burn_error',
