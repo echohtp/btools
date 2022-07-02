@@ -29,6 +29,13 @@ export const Navbar = props => {
             className='p-2 mt-3 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52'
           >
             <li>
+              <Link href='burn' passHref>
+                <button className='font-bold tracking-wide uppercase'>
+                  Burn
+                </button>
+              </Link>
+            </li>
+            <li>
               <Link href='multisend' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   Multi Send
@@ -97,6 +104,13 @@ export const Navbar = props => {
       </div>
       <div className='hidden navbar-center lg:flex'>
         <ul className='p-0 menu menu-horizontal'>
+        <li>
+            <Link href='burn'>
+              <button className='font-bold tracking-wide uppercase'>
+                Burn
+              </button>
+            </Link>
+          </li>
           <li>
             <Link href='multisend' passHref>
               <button className='font-bold tracking-wide uppercase'>
