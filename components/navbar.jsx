@@ -77,6 +77,13 @@ export const Navbar = props => {
                 </button>
               </Link>
             </li>
+            <li>
+              <Link href='https://staking.0xbanana.com' passHref target='_blank' >
+                <button className='font-bold tracking-wide uppercase'>
+                  Staking
+                </button>
+              </Link>
+            </li>
             {props.sending && (
               <li>
                 <label htmlFor='my-drawer' className=''>
@@ -150,6 +157,13 @@ export const Navbar = props => {
             <Link href='holdersnapshot'>
               <button className='font-bold tracking-wide uppercase'>
                 Holder Snapshot
+              </button>
+            </Link>
+          </li>
+          <li>
+            <Link href='https://staking.0xbanana.com' target='_blank'>
+              <button className='font-bold tracking-wide uppercase'>
+                Staking
               </button>
             </Link>
           </li>
