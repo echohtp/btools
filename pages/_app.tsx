@@ -26,6 +26,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 import * as ga from '../lib/ga'
+import { ToastContainer } from 'react-toastify'
 
 // Default styles that can be overridden by your app
 require('@solana/wallet-adapter-react-ui/styles.css');
@@ -75,6 +76,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ConnectionProvider endpoint={endpoint}>
         <WalletProvider wallets={wallets} autoConnect>
             <WalletModalProvider>
+                <ToastContainer/>
                 <Component {...pageProps} />
             </WalletModalProvider>
         </WalletProvider>

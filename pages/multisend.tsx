@@ -27,10 +27,18 @@ const MultiSend: NextPage = () => {
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState<boolean>(false)
 
+  if (sending.length > 7 ) {
+    toast(
+      `Warning! You may not be able to send ${sending.length} NFTs in one transaction. Send fewer NFTs to ensure success`,
+      {
+        toastId: 'TooManyNFTs',
+      })
+  }
+
   const massSend = async (list: Nft[], to: string) => {
     setLoading(true)
     if (to == '') {
-      toast.error('no dest')
+      toast.error('Destination wallet address is blank. Please enter a destination wallet')
       setLoading(false)
       return
     } else {
