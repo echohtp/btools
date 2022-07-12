@@ -40,7 +40,7 @@ export const NftRow = (props: NftRowProps) => {
         <div className='stat-figure text-secondary'>
           <div className={'avatar '}>
             <div className='w-16 rounded-full'>
-              <img src={props.image} />
+              <img src={props.image} alt="nft preview"/>
             </div>
           </div>
         </div>

@@ -58,7 +58,7 @@ const Home: NextPage = () => {
       setNfts([])
       setAllowed(false)
     }
-  }, [publicKey?.toBase58()])
+  }, [publicKey, GET_NFTS])
 
 
   useMemo(()=>{

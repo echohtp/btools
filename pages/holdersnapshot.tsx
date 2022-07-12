@@ -71,7 +71,7 @@ const HolderSnapshot: NextPage = () => {
     } else {
       setNfts([])
     }
-  }, [publicKey?.toBase58()])
+  }, [publicKey, GET_NFTS])
 
   return (
     <div>

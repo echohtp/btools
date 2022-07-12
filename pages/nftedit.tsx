@@ -72,7 +72,7 @@ const NftEdit: NextPage = () => {
       setNfts([])
       setNftMetadata(null)
     }
-  }, [publicKey?.toBase58()])
+  }, [publicKey, GET_NFTS])
 
   const schema = {
     type: 'object',
