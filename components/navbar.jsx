@@ -43,12 +43,20 @@ export const Navbar = props => {
               </Link>
             </li>
             <li>
+              <Link href='nftedit' passHref>
+                <button className='font-bold tracking-wide uppercase'>
+                  NFT Editor
+                </button>
+              </Link>
+            </li>
+
+            {/* <li>
               <Link href='txbuilder' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   TX Builder
                 </button>
               </Link>
-            </li>
+            </li> */}
             {/* <li>
               <Link href='nftminter' passHref>
                 <button className='font-bold tracking-wide uppercase'>
@@ -56,13 +64,13 @@ export const Navbar = props => {
                 </button>
               </Link>
             </li> */}
-            <li>
+            {/* <li>
               <Link href='gatedentry' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   Gated Entry
                 </button>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href='minthash' passHref>
                 <button className='font-bold tracking-wide uppercase'>
@@ -126,12 +134,19 @@ export const Navbar = props => {
             </Link>
           </li>
           <li>
+              <Link href='nftedit' passHref>
+                <button className='font-bold tracking-wide uppercase'>
+                  NFT Editor
+                </button>
+              </Link>
+            </li>
+          {/* <li>
             <Link href='txbuilder' passHref>
               <button className='font-bold tracking-wide uppercase'>
                 TX Builder
               </button>
             </Link>
-          </li>
+          </li> */}
           {/* <li>
             <Link href='nftminter' passHref>
               <button className='font-bold tracking-wide uppercase'>
@@ -139,13 +154,13 @@ export const Navbar = props => {
               </button>
             </Link>
           </li> */}
-          <li>
+          {/* <li>
             <Link href='gatedentry' passHref>
               <button className='font-bold tracking-wide uppercase'>
                 Gated Entry
               </button>
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link href='minthash' passHref>
               <button className='font-bold tracking-wide uppercase'>
