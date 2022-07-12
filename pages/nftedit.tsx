@@ -27,7 +27,7 @@ const NftEdit: NextPage = () => {
   const [nfts, setNfts] = useState<Nft[]>([])
   const [sending, setSending] = useState<Nft[]>([])
   const [search, setSearch] = useState('')
-  const [fileList, setFileList] = useState<UploadFile[]>([])
+  const [fileList, setFileList] = useState<any[]>([])
 
   const [nftMetadata, setNftMetadata] = useState<JsonMetadata | null>(null)
 
@@ -193,7 +193,7 @@ const NftEdit: NextPage = () => {
                         console.log(m_nft.metadata)
                         setNftMetadata(m_nft.metadata)
                         if (m_nft.metadata.properties && m_nft.metadata.properties.files)
-                            setFileList(m_nft.metadata.properties?.files?.map((f)=>({"uid": "uid", "id": "yerr", "name": "yess"})))
+                            setFileList(m_nft.metadata.properties?.files?.map((f)=>({"uid": String(f.type), "id": f.uri, "name": String(f.uri)})))
                         //@ts-ignore
                         document.getElementById('my-modal-6').checked = true
                       }}
@@ -229,7 +229,7 @@ const NftEdit: NextPage = () => {
             success={(resp: any, file: any) => {
               console.log('resp', resp)
               console.log('file', file)
-              setFileList([...fileList, file])
+              setFileList([...fileList, {"uid": String(resp.type), "id": String(resp.type), "name": String(resp.uri)}])
             }}
           >
             <div className='flex h-[2rem] flex-col text-center border'>
