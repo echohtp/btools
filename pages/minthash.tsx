@@ -31,16 +31,16 @@ const MintHash: NextPage = () => {
     let file
 
     if (all)
-      file = new Blob([JSON.stringify(sending.map(n => n.owner.address))], {
+      file = new Blob([JSON.stringify(nfts.map(n => n.mintAddress))], {
         type: 'text/json'
       })
     else
-      file = new Blob([JSON.stringify(nfts.map(n => n.owner.address))], {
+      file = new Blob([JSON.stringify(sending.map(n => n.mintAddress))], {
         type: 'text/json'
       })
 
     element.href = URL.createObjectURL(file)
-    element.download = publicKey?.toBase58() + '_holdersnapshot.json'
+    element.download = publicKey?.toBase58() + '_minthash.json'
     document.body.appendChild(element)
     element.click()
   }
