@@ -43,12 +43,20 @@ export const Navbar = props => {
               </Link>
             </li>
             <li>
+              <Link href='nftedit' passHref>
+                <button className='font-bold tracking-wide uppercase'>
+                  NFT Editor
+                </button>
+              </Link>
+            </li>
+
+            {/* <li>
               <Link href='txbuilder' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   TX Builder
                 </button>
               </Link>
-            </li>
+            </li> */}
             {/* <li>
               <Link href='nftminter' passHref>
                 <button className='font-bold tracking-wide uppercase'>
@@ -56,13 +64,13 @@ export const Navbar = props => {
                 </button>
               </Link>
             </li> */}
-            <li>
+            {/* <li>
               <Link href='gatedentry' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   Gated Entry
                 </button>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href='minthash' passHref>
                 <button className='font-bold tracking-wide uppercase'>
@@ -112,7 +120,7 @@ export const Navbar = props => {
       <div className='hidden navbar-center lg:flex'>
         <ul className='p-0 menu menu-horizontal'>
         <li>
-            <Link href='burn'>
+            <Link href='burn' passHref>
               <button className='font-bold tracking-wide uppercase'>
                 Burn
               </button>
@@ -126,12 +134,19 @@ export const Navbar = props => {
             </Link>
           </li>
           <li>
+              <Link href='nftedit' passHref>
+                <button className='font-bold tracking-wide uppercase'>
+                  NFT Editor
+                </button>
+              </Link>
+            </li>
+          {/* <li>
             <Link href='txbuilder' passHref>
               <button className='font-bold tracking-wide uppercase'>
                 TX Builder
               </button>
             </Link>
-          </li>
+          </li> */}
           {/* <li>
             <Link href='nftminter' passHref>
               <button className='font-bold tracking-wide uppercase'>
@@ -139,13 +154,13 @@ export const Navbar = props => {
               </button>
             </Link>
           </li> */}
-          <li>
+          {/* <li>
             <Link href='gatedentry' passHref>
               <button className='font-bold tracking-wide uppercase'>
                 Gated Entry
               </button>
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link href='minthash' passHref>
               <button className='font-bold tracking-wide uppercase'>
@@ -154,14 +169,14 @@ export const Navbar = props => {
             </Link>
           </li>
           <li>
-            <Link href='holdersnapshot'>
+            <Link href='holdersnapshot' passHref>
               <button className='font-bold tracking-wide uppercase'>
                 Holder Snapshot
               </button>
             </Link>
           </li>
           <li>
-            <Link href='https://staking.0xbanana.com' target='_blank'>
+            <Link href='https://staking.0xbanana.com' target='_blank' passHref>
               <button className='font-bold tracking-wide uppercase'>
                 Staking
               </button>

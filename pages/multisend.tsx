@@ -176,7 +176,7 @@ const MultiSend: NextPage = () => {
       setSending([])
       setTo('')
     }
-  }, [publicKey?.toBase58()])
+  }, [publicKey, GET_NFTS])
 
   return (
     <div>
