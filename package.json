@@ -20,7 +20,7 @@
     "@solana/wallet-adapter-react": "^0.15.3",
     "@solana/wallet-adapter-react-ui": "^0.9.5",
     "@solana/wallet-adapter-wallets": "^0.15.4",
-    "@solana/web3.js": "^1.34.0",
+    "@solana/web3.js": "^1.50.0",
     "@types/react": "18.0.0",
     "antd": "^4.20.7",
     "autoprefixer": "^10.4.4",
