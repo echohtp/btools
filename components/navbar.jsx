@@ -43,6 +43,13 @@ export const Navbar = props => {
               </Link>
             </li>
             <li>
+            <Link href='closenfts' passHref>
+              <button className='font-bold tracking-wide uppercase'>
+                Close Empty NFTs
+              </button>
+            </Link>
+          </li>
+            <li>
               <Link href='txbuilder' passHref>
                 <button className='font-bold tracking-wide uppercase'>
                   TX Builder
@@ -122,6 +129,13 @@ export const Navbar = props => {
             <Link href='multisend' passHref>
               <button className='font-bold tracking-wide uppercase'>
                 Multi Send
+              </button>
+            </Link>
+          </li>
+          <li>
+            <Link href='closenfts' passHref>
+              <button className='font-bold tracking-wide uppercase'>
+                Close Empty NFTs
               </button>
             </Link>
           </li>
