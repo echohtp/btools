@@ -67,7 +67,7 @@ const CloseNfts: NextPage = () => {
         })
 
         // catch error
-      } catch (e) {
+      } catch (e: any) {
         // stop loading
         setLoading(false)
       }
@@ -123,7 +123,7 @@ const CloseNfts: NextPage = () => {
 
       try {
         signed = await signTransaction(tx)
-      } catch (e) {
+      } catch (e: any) {
         console.log(e.message)
         // didnt complete outer loop - if token was sent, remove it from tokens
         setTokens(tokens.filter(t => !sentTokens.includes(t)))
@@ -147,7 +147,7 @@ const CloseNfts: NextPage = () => {
           action: 'close_nft_accounts',
           params: { count: queuedTokens.length }
         })
-      } catch (e) {
+      } catch (e: any) {
         setTxLoading(false)
 
         // didnt complete outer loop - if token was sent, remove it from tokens
