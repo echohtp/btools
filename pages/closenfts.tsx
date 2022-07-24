@@ -9,6 +9,7 @@ import {
   createCloseAccountInstruction
 } from '@solana/spl-token'
 import { Button } from 'antd'
+import * as ga from '../lib/ga'
 
 const CloseNfts: NextPage = () => {
   const { publicKey, signTransaction, connected } = useWallet()
@@ -66,7 +67,7 @@ const CloseNfts: NextPage = () => {
         })
 
         // catch error
-      } catch(e:any) {
+      } catch (e) {
         // stop loading
         setLoading(false)
       }
@@ -77,7 +78,7 @@ const CloseNfts: NextPage = () => {
     if (!publicKey || !signTransaction) {
       return
     }
-    
+
     // Set Transaction Loading to true
     setTxLoading(true)
 
@@ -87,19 +88,17 @@ const CloseNfts: NextPage = () => {
     // close 10 at a time
     for (var i = 0; i < Math.ceil(tokens.length / 10); i++) {
       const tx = new Transaction()
-      
+
       // list of tokens accounts queued to close
       let queuedTokens = []
 
       // load up the 10 to close
       for (var j = 0; j < 10; j++) {
-        
         // make sure we dont overflow the list length
         if (tokens[i * 10 + j]) {
-
           // add the token to the list of tokens to be closed
           queuedTokens.push(tokens[i * 10 + j])
-          
+
           // add the instruction to the transaction
           tx.add(
             createCloseAccountInstruction(
@@ -115,7 +114,7 @@ const CloseNfts: NextPage = () => {
 
       // get recent blockhash
       tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
-      
+
       // set whos paying for the tx
       tx.feePayer = publicKey
 
@@ -124,10 +123,10 @@ const CloseNfts: NextPage = () => {
 
       try {
         signed = await signTransaction(tx)
-      } catch (e: any) {
+      } catch (e) {
         console.log(e.message)
         // didnt complete outer loop - if token was sent, remove it from tokens
-        setTokens(tokens.filter((t)=> !sentTokens.includes(t)))
+        setTokens(tokens.filter(t => !sentTokens.includes(t)))
         setTxLoading(false)
         return
       }
@@ -143,17 +142,31 @@ const CloseNfts: NextPage = () => {
 
         // tx was successful, add queued tokens to sent tokens
         sentTokens = [...queuedTokens, ...sentTokens]
-      } catch (e: any) {
+
+        ga.event({
+          action: 'close_nft_accounts',
+          params: { count: queuedTokens.length }
+        })
+      } catch (e) {
         setTxLoading(false)
-        
+
         // didnt complete outer loop - if token was sent, remove it from tokens
-        setTokens(tokens.filter((t)=> !sentTokens.includes(t) ))
+        setTokens(tokens.filter(t => !sentTokens.includes(t)))
       }
     }
 
+    // record the event
+    ga.event({
+      action: 'close_nft_success',
+      params: {
+        count: tokens.length,
+        value: Number(tokens.length * 0.002 * solPrice).toFixed(2)
+      }
+    })
+
     // tx event done
     setTxLoading(false)
-    
+
     // clear tokens list
     setTokens([])
   }
@@ -172,7 +185,7 @@ const CloseNfts: NextPage = () => {
         {!connected && <h1>Connect your wallet first</h1>}
         {connected && loading && (
           <>
-             <div className='grid grid-cols-1'>
+            <div className='grid grid-cols-1'>
               <div className='items-center h-12'>
                 <Button
                   loading={loading}
