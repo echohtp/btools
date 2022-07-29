@@ -12,6 +12,12 @@
   },
   "dependencies": {
     "@apollo/client": "^3.6.6",
+    "@jsonforms/core": "^2.5.2",
+    "@jsonforms/material-renderers": "^2.5.2",
+    "@jsonforms/react": "^2.5.2",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "@metaplex-foundation/js": "^0.13.3",
     "@metaplex/js": "^4.12.0",
     "@solana/buffer-layout": "^4.0.0",
     "@solana/spl-token": "^0.2.0",

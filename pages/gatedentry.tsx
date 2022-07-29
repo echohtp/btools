@@ -4,6 +4,7 @@ import { Navbar } from '../components/navbar'
 import { useMemo, useState } from 'react'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { gql } from '@apollo/client'
+import { QuickMint } from '../components/quickMint'
 import client from '../client'
 
 const Home: NextPage = () => {
@@ -27,16 +28,26 @@ const Home: NextPage = () => {
   `
 
   const GET_ACCESS = gql`
-  query GetNfts($owners: [PublicKey!], $creators:[PublicKey!] $limit: Int!, $offset: Int!) {
-    nfts(owners: $owners, creators: $creators, limit: $limit, offset: $offset) {
-      name
-      address
-      description
-      image
-      mintAddress
+    query GetNfts(
+      $owners: [PublicKey!]
+      $creators: [PublicKey!]
+      $limit: Int!
+      $offset: Int!
+    ) {
+      nfts(
+        owners: $owners
+        creators: $creators
+        limit: $limit
+        offset: $offset
+      ) {
+        name
+        address
+        description
+        image
+        mintAddress
+      }
     }
-  }
-`
+  `
 
   interface Nft {
     name: string
@@ -56,13 +67,14 @@ const Home: NextPage = () => {
           query: GET_ACCESS,
           variables: {
             owners: [publicKey?.toBase58()],
-            creators: ["232PpcrPc6Kz7geafvbRzt5HnHP4kX88yvzUCN69WXQC"],
+            creators: ['232PpcrPc6Kz7geafvbRzt5HnHP4kX88yvzUCN69WXQC'],
             offset: 0,
             limit: 10000
           }
         })
         .then(res => {
-          if (res.data.nfts && res.data.nfts.length > 0){
+          if (res.data.nfts && res.data.nfts.length > 0) {
+            setNfts(res.data.nfts)
             setAllowed(true)
           }
         })
@@ -71,15 +83,6 @@ const Home: NextPage = () => {
       setAllowed(false)
     }
   }, [publicKey?.toBase58()])
-
-  // useMemo(()=>{
-  //   nfts.map((nft)=>{
-  //     if (approvedAccounts.includes(nft.address)){
-  //       console.log('approved')
-  //       setAllowed(true)
-  //     }
-  //   })
-  // }, [nfts])
 
   return (
     <div>
@@ -96,7 +99,13 @@ const Home: NextPage = () => {
         {connected && (
           <>
             <h1>Connected to: {publicKey?.toBase58()}</h1>
-            {allowed ? <h1>✅</h1> : <h1>🚫</h1>}
+            {allowed ? (
+              <>
+                <QuickMint />
+              </>
+            ) : (
+              <h1>🚫</h1>
+            )}
           </>
         )}
       </div>
