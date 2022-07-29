@@ -39,21 +39,25 @@ export const QuickMint = () => {
       console.log('gonna try and mint this!')
       console.log(data.url)
       axios.get(data.url).then(async d => {
-        const nft = await metaplex
-          .nfts()
-          .create({
-            name: d.data.name,
-            uri: data.url,
-            sellerFeeBasisPoints: d.data.seller_fee_basis_points
-          })
-          .run()
-        console.log('minted!')
-        console.log(nft)
-
+        try {
+          const nft = await metaplex
+            .nfts()
+            .create({
+              name: d.data.name,
+              uri: data.url,
+              sellerFeeBasisPoints: d.data.seller_fee_basis_points
+            })
+            .run()
+          console.log('minted!')
+          console.log(nft)
+        } catch (e) {
+          console.log(e)
+        }
         setLoading(false)
       })
     } catch (e) {
       console.error(e)
+      setLoading(false)
     }
   }
 
