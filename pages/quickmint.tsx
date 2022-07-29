@@ -7,6 +7,7 @@ import { LAMPORTS_PER_SOL, Transaction, PublicKey } from '@solana/web3.js'
 import { Connection, clusterApiUrl } from '@solana/web3.js'
 import { Metaplex, walletAdapterIdentity } from '@metaplex-foundation/js'
 import { Button } from 'antd'
+import axios from 'axios'
 
 const QuickMint: NextPage = () => {
   const connection = new Connection(clusterApiUrl('mainnet-beta'))
@@ -28,15 +29,20 @@ const QuickMint: NextPage = () => {
       console.log(wallet.publicKey?.toBase58())
       console.log('gonna try and mint this!')
       console.log(metadataUrl)
-      const { nft } = await metaplex.nfts().create({
-        uri: metadataUrl
+      axios.get(metadataUrl).then(async (data)=>{
+        const nft  = await metaplex.nfts().create({
+          name: data.data.name,
+          uri: metadataUrl,
+          sellerFeeBasisPoints: 0
+        }).run()
+        console.log('minted!')
+        console.log(nft)
+      
+      setLoading(false)
       })
-      console.log('minted!')
-      console.log(nft)
     } catch (e) {
-      console.error(e.message)
+      console.error(e)
     }
-    setLoading(false)
   }
 
   return (
