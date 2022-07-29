@@ -190,17 +190,17 @@ const MultiSend: NextPage = () => {
         <div className='drawer-content'>
           <Navbar sending={sending} />
           <div className='w-full mb-4'>
-            <input
+            {/* <input
               type='text'
               placeholder='Search...'
               className='w-full input input-bordered input-secondary'
               onChange={e => setSearch(e.target.value)}
-            />
+            /> */}
           </div>
           <div className='container px-4'>
             <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
               {nfts
-                .filter(n => n.name.toLowerCase().includes(search.toLowerCase()))
+                // .filter(n => n.name.toLowerCase().includes(search.toLowerCase()))
                 .map(n => (
                   <NftRow
                     key={Math.random()}
