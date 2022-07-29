@@ -6,10 +6,6 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { gql } from '@apollo/client'
 import client from '../client'
 
-// this is an array of approved token PDA's
-// need to find a better solution than this
-const approvedAccounts = ['CFjkTpfbGc31qHS4vDxbDi2tmw9nMf1ezWS49DRvSgEH']
-
 const Home: NextPage = () => {
   const { publicKey, signTransaction, connected } = useWallet()
   const { connection } = useConnection()
@@ -30,6 +26,18 @@ const Home: NextPage = () => {
     }
   `
 
+  const GET_ACCESS = gql`
+  query GetNfts($owners: [PublicKey!], $creators:[PublicKey!] $limit: Int!, $offset: Int!) {
+    nfts(owners: $owners, creators: $creators, limit: $limit, offset: $offset) {
+      name
+      address
+      description
+      image
+      mintAddress
+    }
+  }
+`
+
   interface Nft {
     name: string
     address: string
@@ -40,35 +48,38 @@ const Home: NextPage = () => {
 
   const [nfts, setNfts] = useState<Nft[]>([])
   const [allowed, setAllowed] = useState(false)
-  
 
   useMemo(() => {
     if (publicKey?.toBase58()) {
       client
         .query({
-          query: GET_NFTS,
+          query: GET_ACCESS,
           variables: {
             owners: [publicKey?.toBase58()],
+            creators: ["232PpcrPc6Kz7geafvbRzt5HnHP4kX88yvzUCN69WXQC"],
             offset: 0,
             limit: 10000
           }
         })
-        .then(res => setNfts(res.data.nfts))
+        .then(res => {
+          if (res.data.nfts && res.data.nfts.length > 0){
+            setAllowed(true)
+          }
+        })
     } else {
       setNfts([])
       setAllowed(false)
     }
   }, [publicKey?.toBase58()])
 
-
-  useMemo(()=>{
-    nfts.map((nft)=>{
-      if (approvedAccounts.includes(nft.address)){
-        console.log('approved')
-        setAllowed(true)
-      }
-    })
-  }, [nfts])
+  // useMemo(()=>{
+  //   nfts.map((nft)=>{
+  //     if (approvedAccounts.includes(nft.address)){
+  //       console.log('approved')
+  //       setAllowed(true)
+  //     }
+  //   })
+  // }, [nfts])
 
   return (
     <div>
@@ -81,12 +92,13 @@ const Home: NextPage = () => {
       <Navbar />
 
       <div className='container px-4'>
-        {!connected && (<h1>Connect your wallet first 🚫</h1>)}
-        { connected && (<>
-        <h1>Connected to: {publicKey?.toBase58()}</h1>
-        {allowed ? <h1>✅</h1>: <h1>🚫</h1>}
-        </>)
-      }
+        {!connected && <h1>Connect your wallet first 🚫</h1>}
+        {connected && (
+          <>
+            <h1>Connected to: {publicKey?.toBase58()}</h1>
+            {allowed ? <h1>✅</h1> : <h1>🚫</h1>}
+          </>
+        )}
       </div>
 
       <footer></footer>
