@@ -10,4 +10,5 @@ export interface Owner {
     image: string
     mintAddress: string
     owner: Owner
+    animationUrl: string
   }

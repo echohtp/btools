@@ -85,6 +85,13 @@ export const Navbar = props => {
               </Link>
             </li>
             <li>
+            <Link href='viewer' passHref>
+              <button className='font-bold tracking-wide uppercase'>
+                Wallet Viewer
+              </button>
+            </Link>
+          </li>
+            <li>
               <Link href='https://staking.0xbanana.com' passHref target='_blank' >
                 <button className='font-bold tracking-wide uppercase'>
                   Staking
@@ -171,6 +178,13 @@ export const Navbar = props => {
             <Link href='holdersnapshot' passHref>
               <button className='font-bold tracking-wide uppercase'>
                 Holder Snapshot
+              </button>
+            </Link>
+          </li>
+          <li>
+            <Link href='viewer' passHref>
+              <button className='font-bold tracking-wide uppercase'>
+                Wallet Viewer
               </button>
             </Link>
           </li>
