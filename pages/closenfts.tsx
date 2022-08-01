@@ -33,7 +33,7 @@ const CloseNfts: NextPage = () => {
       let price = await response.json()
       setSolPrice(price.solana.usd)
     })
-  }, [solPrice])
+  }, [])
 
   useMemo(async () => {
     if (publicKey?.toBase58()) {
@@ -72,7 +72,7 @@ const CloseNfts: NextPage = () => {
         setLoading(false)
       }
     }
-  }, [publicKey?.toBase58()])
+  }, [publicKey])
 
   const closeAll = async () => {
     if (!publicKey || !signTransaction) {
