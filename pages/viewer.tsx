@@ -55,6 +55,10 @@ const Viewer: NextPage = () => {
           }
         })
         .then(res => setNfts(res.data.nfts))
+        ga.event({
+          action: 'viewer_load',
+          params: { who: viewer }
+        })
     } catch (e) {
       if (publicKey) {
         client
@@ -67,6 +71,10 @@ const Viewer: NextPage = () => {
             }
           })
           .then(res => setNfts(res.data.nfts))
+          ga.event({
+            action: 'viewer_load',
+            params: { who:  publicKey?.toBase58() }
+          })
       } else {
         setNfts([])
       }
