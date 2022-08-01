@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { gql } from '@apollo/client'
 import { QuickMint } from '../components/quickMint'
-import { CreateFanout} from '../components/CreateFanout'
+// import { CreateFanout} from '../components/CreateFanout'
 
 import client from '../client'
 
@@ -104,7 +104,7 @@ const Home: NextPage = () => {
             {allowed ? (
               <>
                 <QuickMint />
-                <CreateFanout/>
+                {/* <CreateFanout/> */}
               </>
             ) : (
               <h1>🚫</h1>
