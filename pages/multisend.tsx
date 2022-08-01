@@ -11,14 +11,19 @@ import client from '../client'
 import { Button } from 'antd'
 
 //@ts-ignore
-import { createAssociatedTokenAccountInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, createTransferInstruction} from '@solana/spl-token'
+import {
+  createAssociatedTokenAccountInstruction,
+  getAssociatedTokenAddress,
+  TOKEN_PROGRAM_ID,
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  createTransferInstruction
+} from '@solana/spl-token'
 import { NftRow } from '../components/nftRow'
 import * as ga from '../lib/ga'
 
-import {Nft} from '../types'
+import { Nft } from '../types'
 
 const MultiSend: NextPage = () => {
-
   const { publicKey, signTransaction, connected } = useWallet()
   const { connection } = useConnection()
   const [nfts, setNfts] = useState<Nft[]>([])
@@ -27,18 +32,21 @@ const MultiSend: NextPage = () => {
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState<boolean>(false)
 
-  if (sending.length > 7 ) {
-    toast(
-      `Warning! You may not be able to send ${sending.length} NFTs in one transaction. Send fewer NFTs to ensure success`,
-      {
-        toastId: 'TooManyNFTs',
-      })
-  }
+  // if (sending.length > 7) {
+  //   toast(
+  //     `Warning! You may not be able to send ${sending.length} NFTs in one transaction. Send fewer NFTs to ensure success`,
+  //     {
+  //       toastId: 'TooManyNFTs'
+  //     }
+  //   )
+  // }
 
   const massSend = async (list: Nft[], to: string) => {
     setLoading(true)
     if (to == '') {
-      toast.error('Destination wallet address is blank. Please enter a destination wallet')
+      toast.error(
+        'Destination wallet address is blank. Please enter a destination wallet'
+      )
       setLoading(false)
       return
     } else {
@@ -66,81 +74,88 @@ const MultiSend: NextPage = () => {
       return
     }
 
-    const tx = new Transaction()
-    console.log('trying to send ', list.length, ' nfts')
-    for (var i = 0; i < list.length; i++) {
-      const mintPublicKey = new PublicKey(list[i].mintAddress)
-      const fromTokenAccount = await getAssociatedTokenAddress(
-        mintPublicKey,
-        publicKey
-      )
-      const fromPublicKey = publicKey
-      const destPublicKey = new PublicKey(to)
-      const destTokenAccount = await getAssociatedTokenAddress(
-        mintPublicKey,
-        destPublicKey
-      )
-      const receiverAccount = await connection.getAccountInfo(destTokenAccount)
-
-      if (receiverAccount === null) {
-        tx.add(
-          createAssociatedTokenAccountInstruction(
-            fromPublicKey,
-            destTokenAccount,
-            destPublicKey,
+    toast(`trying to send ${list.length} nfts`)
+    toast(`breaking that up into ${Math.ceil(list.length / 8)} transactions`)
+    for (var i = 0; i < list.length / 8; i++) {
+      const tx = new Transaction()
+      for (var j = 0; j < 8; j++) {
+        if (list[i * 8 + j]) {
+          const mintPublicKey = new PublicKey(list[i * 8 + j].mintAddress)
+          const fromTokenAccount = await getAssociatedTokenAddress(
             mintPublicKey,
-            TOKEN_PROGRAM_ID,
-            ASSOCIATED_TOKEN_PROGRAM_ID
+            publicKey
           )
-        )
+          const fromPublicKey = publicKey
+          const destPublicKey = new PublicKey(to)
+          const destTokenAccount = await getAssociatedTokenAddress(
+            mintPublicKey,
+            destPublicKey
+          )
+          const receiverAccount = await connection.getAccountInfo(
+            destTokenAccount
+          )
+
+          if (receiverAccount === null) {
+            tx.add(
+              createAssociatedTokenAccountInstruction(
+                fromPublicKey,
+                destTokenAccount,
+                destPublicKey,
+                mintPublicKey,
+                TOKEN_PROGRAM_ID,
+                ASSOCIATED_TOKEN_PROGRAM_ID
+              )
+            )
+          }
+
+          tx.add(
+            createTransferInstruction(
+              fromTokenAccount,
+              destTokenAccount,
+              fromPublicKey,
+              1
+            )
+          )
+        }
+      }
+      tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
+      tx.feePayer = publicKey
+
+      let signed: Transaction | undefined = undefined
+
+      try {
+        signed = await signTransaction(tx)
+      } catch (e:any) {
+        toast(e.message)
+        setLoading(false)
+        return
       }
 
-      tx.add(
-        createTransferInstruction(
-          fromTokenAccount,
-          destTokenAccount,
-          fromPublicKey,
-          1
-        )
-      )
+      let signature: string | undefined = undefined
+
+      try {
+        signature = await connection.sendRawTransaction(signed.serialize())
+        await connection.confirmTransaction(signature, 'confirmed')
+
+        toast.success('Transaction successful')
+        ga.event({
+          action: 'multisend_success',
+          params: { count: sending.length }
+        })
+        sending.map(n => {
+          setNfts(nfts.filter(n => !sending.includes(n)))
+        })
+      } catch (e:any) {
+        toast.error(e.message)
+        setLoading(false)
+        ga.event({
+          action: 'multisend_error',
+          params: { msg: e.message }
+        })
+      }
     }
-    tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
-    tx.feePayer = publicKey
-
-    let signed: Transaction | undefined = undefined
-
-    try {
-      signed = await signTransaction(tx)
-    } catch (e: any) {
-      toast(e.message)
-      setLoading(false)
-      return
-    }
-
-    let signature: string | undefined = undefined
-
-    try {
-      signature = await connection.sendRawTransaction(signed.serialize())
-      await connection.confirmTransaction(signature, 'confirmed')
-
-      toast.success('Transaction successful')
-      ga.event({
-        action: 'multisend_success',
-        params: { count: sending.length }
-      })
-      sending.map(n => {
-        setNfts(nfts.filter(n => !sending.includes(n)))
-      })
-      setSending([])
-      setLoading(false)
-    } catch (e: any) {
-      toast.error(e.message)
-      setLoading(false)
-      ga.event({
-        action: 'multisend_error',
-        params: { msg: e.message }
-      })
-    }
+    setSending([])
+    setLoading(false)
   }
 
   const GET_NFTS = gql`
@@ -200,7 +215,9 @@ const MultiSend: NextPage = () => {
           <div className='container px-4'>
             <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
               {nfts
-                .filter(n => n.name.toLowerCase().includes(search.toLowerCase()))
+                .filter(n =>
+                  n.name.toLowerCase().includes(search.toLowerCase())
+                )
                 .map(n => (
                   <NftRow
                     key={Math.random()}

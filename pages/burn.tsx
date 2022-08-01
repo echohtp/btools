@@ -3,7 +3,11 @@ import Head from 'next/head'
 import { Navbar } from '../components/navbar'
 import { useMemo, useState } from 'react'
 //@ts-ignore
-import { TOKEN_PROGRAM_ID, createBurnInstruction, createCloseAccountInstruction} from '@solana/spl-token'
+import {
+  TOKEN_PROGRAM_ID,
+  createBurnInstruction,
+  createCloseAccountInstruction
+} from '@solana/spl-token'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { Transaction, PublicKey } from '@solana/web3.js'
 import { gql } from '@apollo/client'
@@ -39,66 +43,71 @@ const Burn: NextPage = () => {
       return
     }
 
-    const tx = new Transaction()
+    toast(`trying to burn ${list.length} nfts`)
+    toast(`breaking that up into ${Math.ceil(list.length / 8)} transactions`)
+    for (var i = 0; i < list.length / 8; i++) {
+      const tx = new Transaction()
+      for (var j = 0; j < 8; j++) {
+        if (list[i * 8 + j]) {
+          tx.add(
+            createBurnInstruction(
+              new PublicKey(list[i].owner.associatedTokenAccountAddress),
+              new PublicKey(list[i].mintAddress),
+              publicKey,
+              1,
+              [],
+              TOKEN_PROGRAM_ID
+            )
+          )
+          tx.add(
+            createCloseAccountInstruction(
+              new PublicKey(list[i].owner.associatedTokenAccountAddress),
+              publicKey,
+              publicKey,
+              [],
+              TOKEN_PROGRAM_ID
+            )
+          )
+        }
+      }
+      tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
+      tx.feePayer = publicKey
 
-    for (var i = 0; i < list.length; i++) {
-      tx.add(
-        createBurnInstruction(
-          new PublicKey(list[i].owner.associatedTokenAccountAddress),
-          new PublicKey(list[i].mintAddress),
-          publicKey,
-          1,
-          [],
-          TOKEN_PROGRAM_ID
-        )
-      )
-      tx.add(
-        createCloseAccountInstruction(
-          new PublicKey(list[i].owner.associatedTokenAccountAddress),
-          publicKey,
-          publicKey,
-          [],
-          TOKEN_PROGRAM_ID
-        )
-      )
+      let signed: Transaction | undefined = undefined
+
+      try {
+        signed = await signTransaction(tx)
+      } catch (e:any) {
+        toast(e.message)
+        setLoading(false)
+        return
+      }
+
+      let signature: string | undefined = undefined
+
+      try {
+        signature = await connection.sendRawTransaction(signed.serialize())
+        await connection.confirmTransaction(signature, 'confirmed')
+
+        toast.success('Transaction successful')
+        ga.event({
+          action: 'burn_success',
+          params: { count: sending.length }
+        })
+        sending.map(n => {
+          setNfts(nfts.filter(n => !sending.includes(n)))
+        })
+      } catch (e:any) {
+        toast.error(e.message)
+        setLoading(false)
+        ga.event({
+          action: 'burn_error',
+          params: { msg: e.message }
+        })
+      }
     }
-    tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
-    tx.feePayer = publicKey
-
-    let signed: Transaction | undefined = undefined
-
-    try {
-      signed = await signTransaction(tx)
-    } catch (e: any) {
-      toast(e.message)
-      setLoading(false)
-      return
-    }
-
-    let signature: string | undefined = undefined
-
-    try {
-      signature = await connection.sendRawTransaction(signed.serialize())
-      await connection.confirmTransaction(signature, 'confirmed')
-
-      toast.success('Transaction successful')
-      ga.event({
-        action: 'burn_success',
-        params: { count: sending.length }
-      })
-      sending.map(n => {
-        setNfts(nfts.filter(n => !sending.includes(n)))
-      })
-      setSending([])
-      setLoading(false)
-    } catch (e: any) {
-      toast.error(e.message)
-      setLoading(false)
-      ga.event({
-        action: 'burn_error',
-        params: { msg: e.message }
-      })
-    }
+    setSending([])
+    setLoading(false)
   }
 
   const GET_NFTS = gql`
@@ -158,7 +167,9 @@ const Burn: NextPage = () => {
           <div className='container px-4'>
             <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
               {nfts
-                .filter(n => n.name.toLowerCase().includes(search.toLowerCase()))
+                .filter(n =>
+                  n.name.toLowerCase().includes(search.toLowerCase())
+                )
                 .map(n => (
                   <NftRow
                     key={Math.random()}
