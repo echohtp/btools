@@ -1,7 +1,7 @@
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client'
 
 const client = new ApolloClient({
-    uri: "https://graph.holaplex.com/v1",
+    uri: process.ENV.HOLA_API,
     cache: new InMemoryCache({resultCaching: false})
 })
 
