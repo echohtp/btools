@@ -5,9 +5,11 @@ import { useMemo, useState } from 'react'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { gql } from '@apollo/client'
 import { QuickMint } from '../components/quickMint'
+import {EditionPrinter} from '../components/editionPrinter'
 // import { CreateFanout} from '../components/CreateFanout'
 
 import client from '../client'
+
 
 const Home: NextPage = () => {
   const { publicKey, signTransaction, connected } = useWallet()
@@ -105,6 +107,7 @@ const Home: NextPage = () => {
               <>
                 <QuickMint />
                 {/* <CreateFanout/> */}
+                <EditionPrinter/>
               </>
             ) : (
               <h1>🚫</h1>
