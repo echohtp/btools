@@ -8,7 +8,9 @@ import 'react-toastify/dist/ReactToastify.css'
 import client from '../client'
 import React from 'react'
 import { NftRow } from '../components/nftRow'
-
+import { PublicKey } from '@solana/web3.js'
+import * as ga from '../lib/ga'
+ 
 const HolderSnapshot: NextPage = () => {
   interface Nft {
     mintAddress: string
@@ -22,6 +24,7 @@ const HolderSnapshot: NextPage = () => {
   const [nfts, setNfts] = useState<Nft[]>([])
   const [sending, setSending] = useState<Nft[]>([])
   const [search, setSearch] = useState<string>('')
+  const [viewer, setViewer] = useState('')
 
   const downloadFile = (all: boolean = false) => {
     const element = document.createElement('a')
@@ -56,22 +59,44 @@ const HolderSnapshot: NextPage = () => {
     }
   `
 
-  useMemo(() => {
-    if (publicKey?.toBase58()) {
+useMemo(() => {
+  try {
+    let searchKey = new PublicKey(viewer)
+    client
+      .query({
+        query: GET_NFTS,
+        variables: {
+          owners: [publicKey?.toBase58()],
+          offset: 0,
+          limit: 10000
+        }
+      })
+      .then(res => setNfts(res.data.nfts))
+      ga.event({
+        action: 'viewer_load',
+        params: { who: viewer }
+      })
+  } catch (e) {
+    if (publicKey) {
       client
         .query({
           query: GET_NFTS,
           variables: {
-            creators: [publicKey?.toBase58()],
+            owners: [publicKey?.toBase58()],
             offset: 0,
             limit: 10000
           }
         })
         .then(res => setNfts(res.data.nfts))
+        ga.event({
+          action: 'viewer_load',
+          params: { who:  publicKey?.toBase58() }
+        })
     } else {
       setNfts([])
     }
-  }, [publicKey, GET_NFTS])
+  }
+}, [publicKey, GET_NFTS, viewer])
 
   return (
     <div>
@@ -86,6 +111,14 @@ const HolderSnapshot: NextPage = () => {
           <Navbar sending={sending} />
 
           <div className='container px-4'>
+          <div className='w-full mb-4'>
+            <input
+              type='text'
+              placeholder='View inside a wallet...'
+              className='w-full input input-bordered input-secondary'
+              onChange={e => setViewer(e.target.value)}
+            />
+          </div>
             <div className='w-full mb-4'>
               <input
                 type='text'

@@ -108,14 +108,14 @@ const MultiSend: NextPage = () => {
             )
           }
 
-          tx.add(
-            createTransferInstruction(
-              fromTokenAccount,
-              destTokenAccount,
-              fromPublicKey,
-              1
-            )
-          )
+          // tx.add(
+          //   createTransferInstruction(
+          //     fromTokenAccount,
+          //     destTokenAccount,
+          //     fromPublicKey,
+          //     1
+          //   )
+          // )
         }
       }
       tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
