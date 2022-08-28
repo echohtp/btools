@@ -8,6 +8,7 @@ import { gql } from '@apollo/client'
 import client from '../client'
 import { JsonForms } from '@jsonforms/react'
 import { Nft } from '../types'
+import * as ga from '../lib/ga'
 
 export const EditionPrinter = () => {
   const connection = new Connection(clusterApiUrl('mainnet-beta'))
@@ -123,6 +124,8 @@ export const EditionPrinter = () => {
         .run()
 
       alert('done!')
+      ga.event({action: 'edition_print',
+      params: { mint: nftPk.toBase58() }})
     } catch (e: any) {
       alert('error')
       console.error(e.message)

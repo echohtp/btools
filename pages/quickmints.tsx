@@ -4,6 +4,7 @@ import { Navbar } from '../components/navbar'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { EditionPrinter } from '../components/editionPrinter'
 import { QuickMint } from '../components/quickMint'
+import * as ga from '../lib/ga'
 
 const EditionPrinterPage: NextPage = () => {
   const { publicKey, signTransaction, connected } = useWallet()
