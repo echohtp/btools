@@ -120,9 +120,10 @@ export const EditionPrinter = () => {
         .run()
       console.log("logline")
       
-      const owners = data.destinationAddress.split(',')
+      const owners = data.destinationAddress.split(',') ? data.destinationAddress.split(',') : data.destinationAddress
+      console.log(owners)
       for (var i =0 ; i < owners.length; i++){
-        const newOwner = new PublicKey(data.destinationAddress[i])
+        const newOwner = new PublicKey(owners[i])
         await metaplex
         .nfts()
         .printNewEdition(nft, { newOwner })
