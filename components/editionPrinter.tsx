@@ -96,15 +96,18 @@ export const EditionPrinter = () => {
       alert('mint hash needed')
       return
     }
+
+    if (data.destinationAddress == ''){
+      alert('destination address needed')
+      return
+    }
+
     setLoading(true)
     try {
       const metaplex = Metaplex.make(connection).use(
         walletAdapterIdentity(wallet)
       )
 
-        console.log(
-          1
-        )
       const nftPk =
         (data.mintHash !== null && data.mintHash !== "")
           ? new PublicKey(data.nfts)
@@ -116,12 +119,17 @@ export const EditionPrinter = () => {
         .findByMint(nftPk)
         .run()
       console.log("logline")
-      const newOwner =
-        data.destinationAddress !== '' ? new PublicKey(data.destinationAddress) : wallet.publicKey!
-      await metaplex
+      
+      const owners = data.destinationAddress.split(',')
+      for (var i =0 ; i < owners.length; i++){
+        const newOwner = new PublicKey(data.destinationAddress[i])
+        await metaplex
         .nfts()
         .printNewEdition(nft, { newOwner })
         .run()
+      }
+        
+      
 
       alert('done!')
       ga.event({action: 'edition_print',
