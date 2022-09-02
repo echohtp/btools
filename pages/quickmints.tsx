@@ -5,6 +5,7 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { EditionPrinter } from '../components/editionPrinter'
 import { QuickMint } from '../components/quickMint'
 import * as ga from '../lib/ga'
+import AirdropCannon from '../components/airdropCannon'
 
 const EditionPrinterPage: NextPage = () => {
   const { publicKey, signTransaction, connected } = useWallet()
@@ -26,6 +27,7 @@ const EditionPrinterPage: NextPage = () => {
           <>
             <QuickMint />
             <EditionPrinter />
+            <AirdropCannon/>
           </>
         )}
       </div>

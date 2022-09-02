@@ -118,7 +118,7 @@ export const EditionPrinter = () => {
         .findByMint(nftPk)
         .run()
       
-      const owners = data.destinationAddress.split(',') ? data.destinationAddress.split(',') : data.destinationAddress
+      const owners = data.destinationAddress.split(',') ? data.destinationAddress.replace(/(^,)|(,$)/g, '').split(',') : data.destinationAddress
       console.log(owners)
       for (var i =0 ; i < owners.length; i++){
         const newOwner = new PublicKey(owners[i])
