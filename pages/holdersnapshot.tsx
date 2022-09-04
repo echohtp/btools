@@ -119,7 +119,7 @@ useMemo(() => {
               onChange={e => setViewer(e.target.value)}
             />
           </div>
-            <div className='w-full mb-4'>
+            {/* <div className='w-full mb-4'>
               <input
                 type='text'
                 placeholder='Search...'
@@ -132,10 +132,10 @@ useMemo(() => {
               >
                 Get All
               </button>
-            </div>
+            </div> */}
             <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
               {nfts
-                .filter(n => n.name.toLowerCase().includes(search.toLowerCase()))
+                // .filter(n => n.name.toLowerCase().includes(search.toLowerCase()))
                 .map(n => (
                   <NftRow
                     owner={n.owner.address}

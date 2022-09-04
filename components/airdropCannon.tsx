@@ -115,6 +115,9 @@ export const AirdropCannon = () => {
             destTokenAccount
           )
 
+
+          console.log(`sending ${mintPublicKey.toBase58()} to ${destPublicKey.toBase58()}`)
+
           if (receiverAccount === null) {
             tx.add(
               createAssociatedTokenAccountInstruction(
