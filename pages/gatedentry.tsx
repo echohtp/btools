@@ -70,7 +70,7 @@ const Home: NextPage = () => {
           query: GET_ACCESS,
           variables: {
             owners: [publicKey?.toBase58()],
-            creators: ['232PpcrPc6Kz7geafvbRzt5HnHP4kX88yvzUCN69WXQC'],
+            creators: ['232PpcrPc6Kz7geafvbRzt5HnHP4kX88yvzUCN69WXQC', '465Av5qxktim1iN9p54k41MbRGPe2nqCfyVYwB2EF84J'],
             offset: 0,
             limit: 10000
           }
