@@ -4,11 +4,10 @@ import { Navbar } from '../components/navbar'
 import { useMemo, useState } from 'react'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { gql } from '@apollo/client'
-import { QuickMint } from '../components/quickMint'
-import {EditionPrinter} from '../components/editionPrinter'
 // import { CreateFanout} from '../components/CreateFanout'
 
 import client from '../client'
+import NftEdit from '../components/nftedit'
 
 
 const Home: NextPage = () => {
@@ -105,9 +104,7 @@ const Home: NextPage = () => {
             <h1>Connected to: {publicKey?.toBase58()}</h1>
             {allowed ? (
               <>
-                <QuickMint />
-                {/* <CreateFanout/> */}
-                <EditionPrinter/>
+              <NftEdit/>
               </>
             ) : (
               <h1>🚫</h1>
