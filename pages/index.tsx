@@ -41,7 +41,7 @@ const Home: NextPage = () => {
             className={styles.card}
           >
             <h2>NFT Editor &rarr;</h2>
-            <p>Edit your NFT's metadata on and off chain!</p>
+            <p>Edit your NFT&apos;s metadata on and off chain!</p>
           </a>
           
           <a href="minthash" className={styles.card}>

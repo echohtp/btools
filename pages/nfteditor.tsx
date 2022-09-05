@@ -107,7 +107,7 @@ const Home: NextPage = () => {
               <NftEdit/>
               </>
             ) : (
-              <h1>🚫 <a href="https://exchange.art/artists/0xBanana/nfts" target={"_blank"}>Grab some NFTs for access here</a></h1>
+              <h1>🚫 <a href="https://exchange.art/artists/0xBanana/nfts" target={"_blank"} rel="noreferrer">Grab some NFTs for access here</a></h1>
             )}
           </>
         )}
