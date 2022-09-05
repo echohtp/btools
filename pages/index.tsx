@@ -37,11 +37,11 @@ const Home: NextPage = () => {
           </a>
 
           <a
-            href="gatedentry"
+            href="NFT Editor"
             className={styles.card}
           >
-            <h2>Gated Entry &rarr;</h2>
-            <p>Members only area, are you in, anon?</p>
+            <h2>NFT Editor &rarr;</h2>
+            <p>Edit your NFT's metadata on and off chain!</p>
           </a>
           
           <a href="minthash" className={styles.card}>

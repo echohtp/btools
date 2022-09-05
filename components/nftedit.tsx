@@ -110,6 +110,7 @@ export const NftEdit = () => {
   const [modalData, setModalData] = useState<any>({})
   const [nftData, setNftData] = useState<any>({})
   const [selectedNft, setSelectedNft] = useState<any>()
+  const [toggler, setToggler] = useState<boolean>(false)
   const metaplex = Metaplex.make(connection).use(
     walletAdapterIdentity(useWallet())
   )
@@ -139,7 +140,9 @@ export const NftEdit = () => {
     console.log('selected mint: ', selectedNft.mintAddress.toBase58())
     // console.log('updated mint: ', updatedMetaplexNft.mintAddress.toBase58())
     console.log('updated nft: ', updatedNft.mintAddress.toBase58())
+    setToggler(!toggler)
     toast('done')
+    
   }
 
   const GET_NFTS = gql`
@@ -182,7 +185,7 @@ export const NftEdit = () => {
       setSending([])
       setTo('')
     }
-  }, [publicKey, GET_NFTS])
+  }, [publicKey, GET_NFTS, toggler])
 
   return (
     <div>

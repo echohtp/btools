@@ -64,9 +64,9 @@ export const Navbar = props => {
               </Link>
             </li> */}
             <li>
-              <Link href='gatedentry' passHref>
+              <Link href='nfteditor' passHref>
                 <button className='font-bold tracking-wide uppercase'>
-                  Gated Entry
+                  NFT Editor
                 </button>
               </Link>
             </li>
@@ -161,9 +161,9 @@ export const Navbar = props => {
             </Link>
           </li> */}
           <li>
-            <Link href='gatedentry' passHref>
+            <Link href='nfteditor' passHref>
               <button className='font-bold tracking-wide uppercase'>
-                Gated Entry
+                NFT Editor
               </button>
             </Link>
           </li>

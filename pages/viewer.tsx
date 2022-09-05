@@ -2,28 +2,18 @@ import { NextPage } from 'next'
 import Head from 'next/head'
 import { Navbar } from '../components/navbar'
 import { useMemo, useState } from 'react'
-
-
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { Transaction, PublicKey } from '@solana/web3.js'
 import { gql } from '@apollo/client'
-import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+// import { CreateFanout} from '../components/CreateFanout'
+
 import client from '../client'
+import NftEdit from '../components/nftedit'
+import Viewer from '../components/viewer'
 
-import { NftRow } from '../components/nftRow'
-import * as ga from '../lib/ga'
-import { Nft } from '../types'
 
-const Viewer: NextPage = () => {
+const Home: NextPage = () => {
   const { publicKey, signTransaction, connected } = useWallet()
   const { connection } = useConnection()
-  const [nfts, setNfts] = useState<Nft[]>([])
-  const [sending, setSending] = useState<Nft[]>([])
-  const [to, setTo] = useState('')
-  const [search, setSearch] = useState('')
-  const [viewer, setViewer] = useState('')
-  const [loading, setLoading] = useState(false)
 
   const GET_NFTS = gql`
     query GetNfts($owners: [PublicKey!], $limit: Int!, $offset: Int!) {
@@ -32,7 +22,6 @@ const Viewer: NextPage = () => {
         mintAddress
         name
         description
-        animationUrl
         image
         owner {
           address
@@ -42,92 +31,92 @@ const Viewer: NextPage = () => {
     }
   `
 
+  const GET_ACCESS = gql`
+    query GetNfts(
+      $owners: [PublicKey!]
+      $creators: [PublicKey!]
+      $limit: Int!
+      $offset: Int!
+    ) {
+      nfts(
+        owners: $owners
+        creators: $creators
+        limit: $limit
+        offset: $offset
+      ) {
+        name
+        address
+        description
+        image
+        mintAddress
+      }
+    }
+  `
+
+  interface Nft {
+    name: string
+    address: string
+    description: string
+    image: string
+    mintAddress: string
+  }
+
+  const [nfts, setNfts] = useState<Nft[]>([])
+  const [allowed, setAllowed] = useState(false)
+
   useMemo(() => {
-    try {
-      let searchKey = new PublicKey(viewer)
+    if (publicKey?.toBase58()) {
       client
         .query({
-          query: GET_NFTS,
+          query: GET_ACCESS,
           variables: {
-            owners: [searchKey],
+            owners: [publicKey?.toBase58()],
+            creators: ['232PpcrPc6Kz7geafvbRzt5HnHP4kX88yvzUCN69WXQC', '465Av5qxktim1iN9p54k41MbRGPe2nqCfyVYwB2EF84J'],
             offset: 0,
             limit: 10000
           }
         })
-        .then(res => setNfts(res.data.nfts))
-        ga.event({
-          action: 'viewer_load',
-          params: { who: viewer }
+        .then(res => {
+          if (res.data.nfts && res.data.nfts.length > 0) {
+            setNfts(res.data.nfts)
+            setAllowed(true)
+          }
         })
-    } catch (e) {
-      if (publicKey) {
-        client
-          .query({
-            query: GET_NFTS,
-            variables: {
-              owners: [publicKey?.toBase58()],
-              offset: 0,
-              limit: 10000
-            }
-          })
-          .then(res => setNfts(res.data.nfts))
-          ga.event({
-            action: 'viewer_load',
-            params: { who:  publicKey?.toBase58() }
-          })
-      } else {
-        setNfts([])
-      }
+    } else {
+      setNfts([])
+      setAllowed(false)
     }
-  }, [publicKey, GET_NFTS, viewer])
+  }, [publicKey, GET_ACCESS])
 
   return (
     <div>
       <Head>
-        <title>Viewer!</title>
-        <meta name='description' content='View NFTs inside any wallet!' />
+        <title>Gated Entry</title>
+        <meta name='description' content='Solana Gated Entry' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <div className='drawer drawer-end'>
-        <input id='my-drawer' type='checkbox' className='drawer-toggle' />
-        <div className='drawer-content'>
-          <Navbar sending={[]} />
-          <div className='w-full mb-4'>
-            <input
-              type='text'
-              placeholder='View inside a wallet...'
-              className='w-full input input-bordered input-secondary'
-              onChange={e => setViewer(e.target.value)}
-            />
-          </div>
-          <div className='w-full mb-4'>
-            <input
-              type='text'
-              placeholder='Search...'
-              className='w-full input input-bordered input-secondary'
-              onChange={e => setSearch(e.target.value)}
-            />
-          </div>
-          <div className='container px-4'>
-            <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-              {nfts
-                .filter((n: Nft) => n.name.toLowerCase().includes(search.toLowerCase()))
-                .map((n: Nft) => (
-                  <NftRow
-                    key={Math.random()}
-                    name={n.name}
-                    image={n.image}
-                    unselect={() => {}}
-                    select={() => {}}
-                    selected={false}
-                  />
-                ))}
-            </div>
-          </div>
-        </div>
+
+      <Navbar />
+
+      <div className='container px-4'>
+        {!connected && <h1>Connect your wallet first 🚫</h1>}
+        {connected && (
+          <>
+            <h1>Connected to: {publicKey?.toBase58()}</h1>
+            {allowed ? (
+              <>
+              <Viewer/>
+              </>
+            ) : (
+              <h1>🚫 <a href="https://exchange.art/artists/0xBanana/nfts" target={"_blank"}>Grab some NFTs for access here</a></h1>
+            )}
+          </>
+        )}
       </div>
+
+      <footer></footer>
     </div>
   )
 }
 
-export default Viewer
+export default Home
