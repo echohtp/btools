@@ -105,6 +105,7 @@ export const NftEdit = () => {
   const [sending, setSending] = useState<Nft[]>([])
   const [to, setTo] = useState('')
   const [search, setSearch] = useState('')
+  const [searchMint, setSearchMint] = useState('')
   const [loading, setLoading] = useState<boolean>(false)
   const [showModal, setShowModal] = useState<boolean>(false)
   const [modalData, setModalData] = useState<any>({})
@@ -142,7 +143,6 @@ export const NftEdit = () => {
     console.log('updated nft: ', updatedNft.mintAddress.toBase58())
     setToggler(!toggler)
     toast('done')
-    
   }
 
   const GET_NFTS = gql`
@@ -187,12 +187,44 @@ export const NftEdit = () => {
     }
   }, [publicKey, GET_NFTS, toggler])
 
+  const loadNft = async (mintAddress: string) => {
+    const nPK = new PublicKey(mintAddress)
+
+    const nft = await metaplex
+      .nfts()
+      .findByMint(nPK)
+      .run()
+    setSelectedNft(nft)
+    console.log(nft.uri)
+    // send it to modal
+
+    axios.get(nft.uri).then(res => {
+      console.log('got data')
+      let data = res.data
+      console.log(data)
+      setModalData(data)
+    })
+
+    //@ts-ignore
+    document.getElementById('my-modal-3').checked = true
+  }
+
   return (
     <div>
       <h2>Nft Editor</h2>
       <div className='drawer drawer-end'>
         <input id='my-drawer' type='checkbox' className='drawer-toggle' />
         <div className='drawer-content'>
+        <div className='w-full'>
+              <input className="w-11/12 input input-bordered input-primary" type={'text'} placeholder='load this mint' id="searchMint" onChange={((e)=>{
+                setSearchMint(e.target.value)
+              })} />
+              <button className='w-1/12 btn btn-secondary' onClick={() => {
+                loadNft(searchMint)
+              }}>
+                load nft
+              </button>
+            </div>
           <div className='w-full mb-4'>
             <input
               type='text'
@@ -217,26 +249,7 @@ export const NftEdit = () => {
                     }}
                     select={async () => {
                       // get NFT data from metaplex
-
-                      const nPK = new PublicKey(n.mintAddress)
-
-                      const nft = await metaplex
-                        .nfts()
-                        .findByMint(nPK)
-                        .run()
-                      setSelectedNft(nft)
-                      console.log(nft.uri)
-                      // send it to modal
-
-                      axios.get(nft.uri).then(res => {
-                        console.log('got data')
-                        let data = res.data
-                        console.log(data)
-                        setModalData(data)
-                      })
-
-                      //@ts-ignore
-                      document.getElementById('my-modal-3').checked = true
+                      loadNft(n.mintAddress)
                     }}
                     selected={false}
                   />
