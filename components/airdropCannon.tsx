@@ -197,7 +197,7 @@ export const AirdropCannon = () => {
           onClick={shipIt}
           className='btn btn-secondary'
         >
-          Print It
+          Ship It
         </Button>
       </div>
     </>
