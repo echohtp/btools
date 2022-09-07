@@ -12,6 +12,7 @@ import HolderSnapshot from '../components/holdersnapshot'
 import QuickMint from '../components/quickMint'
 import EditionPrinter from '../components/editionPrinter'
 import AirdropCannon from '../components/airdropCannon'
+import QuickFix from '../components/quickFix'
 
 
 const Home: NextPage = () => {
@@ -106,6 +107,7 @@ const Home: NextPage = () => {
             {allowed ? (
               <>
               <QuickMint />
+              <QuickFix/>
             <EditionPrinter />
             <AirdropCannon/>
               </>
