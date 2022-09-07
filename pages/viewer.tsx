@@ -108,7 +108,7 @@ const Home: NextPage = () => {
               <Viewer/>
               </>
             ) : (
-              <h1>🚫 <a href="https://exchange.art/artists/0xBanana/nfts" target={"_blank"} rel="noreferrer">Grab some NFTs for access here</a></h1>
+              <h1>🚫 <a href="https://exchange.art/artists/0xBanana/nfts" target={"_blank"} rel="noreferrer">Grab some NFTs for access here</a><br/><a href="https://exchange.art/artists/graffito/nfts" target={"_blank"} rel="noreferrer">or here</a></h1>
             )}
           </>
         )}
