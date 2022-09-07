@@ -95,8 +95,8 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Holdersnapshot</title>
-        <meta name='description' content='Holder snapshot' />
+        <title>Quick Mints</title>
+        <meta name='description' content='Quick tools by 0xbanana' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Navbar/>

@@ -78,7 +78,7 @@ export const QuickMint = () => {
           onClick={mintIt}
           className='btn btn-secondary'
         >
-          mint
+          mint it
         </Button>
       </div>
     </>

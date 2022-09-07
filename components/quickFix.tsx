@@ -94,7 +94,7 @@ export const QuickFix = () => {
           onClick={mintIt}
           className='btn btn-secondary'
         >
-          fix
+          fix it
         </Button>
       </div>
     </>

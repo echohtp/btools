@@ -31,17 +31,20 @@ const Home: NextPage = () => {
             <p>Send multiple NFTs in one transaction</p>
           </a>
 
-          <a href="txbuilder" className={styles.card}>
-            <h2>Transaction Builder &rarr;</h2>
-            <p>Build custom solana transactions</p>
-          </a>
-
           <a
-            href="NFT Editor"
+            href="nfteditor"
             className={styles.card}
           >
             <h2>NFT Editor &rarr;</h2>
             <p>Edit your NFT&apos;s metadata on and off chain!</p>
+          </a>
+
+          <a
+            href="quickmints"
+            className={styles.card}
+          >
+            <h2>Quick Mints &rarr;</h2>
+            <p>Quick tools</p>
           </a>
           
           <a href="minthash" className={styles.card}>
@@ -54,10 +57,11 @@ const Home: NextPage = () => {
             <p>Get your holder list here, anon!</p>
           </a>
           
-          {/* <a href="resources" className={styles.card}>
-            <h2>Solana Web3 Resources&rarr;</h2>
-            <p>My bookmarks</p>
-          </a> */}
+          <a href="burn" className={styles.card}>
+            <h2>Burn &rarr;</h2>
+            <p>Burn NFTs and reclaim rent</p>
+          </a>
+
 
         </div>
       </main>
