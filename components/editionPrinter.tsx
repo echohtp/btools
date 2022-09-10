@@ -14,7 +14,7 @@ export const EditionPrinter = () => {
   const connection = new Connection(clusterApiUrl('mainnet-beta'))
   const wallet = useWallet()
   const [loading, setLoading] = useState<boolean>(false)
-  const initData = { destinationAddress: wallet.publicKey?.toBase58() }
+  const initData = { destinationAddress: wallet.publicKey?.toBase58(), nfts: '', mintAddress: '' }
   const [data, setData] = useState<any>(initData)
   const [nfts, setNfts] = useState<any[]>([])
   const [lists, setLists] = useState<any[]>([])
@@ -83,6 +83,9 @@ export const EditionPrinter = () => {
             type: 'string',
             title: 'Nft',
             enum: []
+          },
+          mintHash: {
+            type: 'string'
           }
         },
         required: ['uri']
@@ -107,10 +110,10 @@ export const EditionPrinter = () => {
       const metaplex = Metaplex.make(connection).use(
         walletAdapterIdentity(wallet)
       )
-      const nftPk =
-        (data.mintHash !== null && data.mintHash !== "")
-          ? new PublicKey(data.nfts)
-          : new PublicKey(data.mintHash)
+      const nftPk = (data.mintHash && data.mintHash !== "" && data.nfts !== "") ? new PublicKey(data.mintHash)  : new PublicKey(data.nfts)
+        // (data.mintHash !== null && data.mintHash !== ""  && data.nfts !== "")
+        //   ? new PublicKey(data.nfts)
+        //   : new PublicKey(data.mintHash)
       
       console.log("nft: ", nftPk.toBase58())
       const nft = await metaplex
