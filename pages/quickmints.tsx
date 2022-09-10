@@ -13,6 +13,7 @@ import QuickMint from '../components/quickMint'
 import EditionPrinter from '../components/editionPrinter'
 import AirdropCannon from '../components/airdropCannon'
 import QuickFix from '../components/quickFix'
+import UpdateUA from '../components/updateUA'
 
 
 const Home: NextPage = () => {
@@ -106,6 +107,7 @@ const Home: NextPage = () => {
           <>
             {allowed ? (
               <>
+              <UpdateUA/>
               <QuickMint />
               <QuickFix/>
             <EditionPrinter />
