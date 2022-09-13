@@ -141,6 +141,7 @@ export const NftEdit = () => {
     console.log('selected mint: ', selectedNft.mintAddress.toBase58())
     // console.log('updated mint: ', updatedMetaplexNft.mintAddress.toBase58())
     console.log('updated nft: ', updatedNft.mintAddress.toBase58())
+    ga.event({ action: 'nft_edit', params: { who: wallet.publicKey?.toBase58() } })
     setToggler(!toggler)
     toast('done')
   }
