@@ -75,12 +75,12 @@ const MultiSend = () => {
     }
 
     toast(`trying to send ${list.length} nfts`)
-    toast(`breaking that up into ${Math.ceil(list.length / 8)} transactions`)
-    for (var i = 0; i < list.length / 8; i++) {
+    toast(`breaking that up into ${Math.ceil(list.length / 7)} transactions`)
+    for (var i = 0; i < list.length / 6; i++) {
       const tx = new Transaction()
-      for (var j = 0; j < 8; j++) {
-        if (list[i * 8 + j]) {
-          const mintPublicKey = new PublicKey(list[i * 8 + j].mintAddress)
+      for (var j = 0; j < 6; j++) {
+        if (list[i * 6 + j]) {
+          const mintPublicKey = new PublicKey(list[i * 6 + j].mintAddress)
           const fromTokenAccount = await getAssociatedTokenAddress(
             mintPublicKey,
             publicKey

@@ -40,7 +40,7 @@
     "graphql": "^16.4.0",
     "next": "12.1.6",
     "nextjs-cors": "^2.1.1",
-    "nft.storage": "^6.3.0",
+    "nft.storage": "^7.0.0",
     "postcss": "^8.4.12",
     "postcss-cli": "^9.1.0",
     "ramda": "^0.28.0",
