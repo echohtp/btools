@@ -130,7 +130,7 @@ const Home: NextPage = () => {
         <div className='flex'>
           <div className='flex-none w-48 border lg:mr-4'>
             <div className='grid grid-flow-row auto-rows-max'>
-              <WalletMultiButton />
+            <button className='bg-purple-800'><WalletMultiButton className='w-full'/></button>
               {navbarLinks.map(link => (
                 <Link href={`/${link.href}`} key={Math.random()}>
                   <div className='py-4 text-center align-middle border-y'>
