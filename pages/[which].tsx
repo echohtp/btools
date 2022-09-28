@@ -38,6 +38,19 @@ const navbarLinks = [
   { title: 'VIEWER', href: 'viewer' }
 ]
 
+const Sidebar = () => {
+  return(<div className='grid grid-flow-row auto-rows-max'>
+  <button className='bg-purple-800'><WalletMultiButton className='w-full'/></button>
+    {navbarLinks.map(link => (
+      <Link href={`/${link.href}`} key={Math.random()}>
+        <div className='py-4 text-center align-middle border-y'>
+          {link.title}
+        </div>
+      </Link>
+    ))}
+  </div>)
+}
+
 const Home: NextPage = () => {
   const { publicKey, signTransaction, connected } = useWallet()
   const { connection } = useConnection()
@@ -130,16 +143,7 @@ const Home: NextPage = () => {
       <div className='container px-4'>
         <div className='flex'>
           <div className='flex-none w-48 border lg:mr-4'>
-            <div className='grid grid-flow-row auto-rows-max'>
-            <button className='bg-purple-800'><WalletMultiButton className='w-full'/></button>
-              {navbarLinks.map(link => (
-                <Link href={`/${link.href}`} key={Math.random()}>
-                  <div className='py-4 text-center align-middle border-y'>
-                    {link.title}
-                  </div>
-                </Link>
-              ))}
-            </div>
+            <Sidebar/>
           </div>
           <div className='grow'>
             {connected && allowed && query.which == '' && (

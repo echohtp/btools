@@ -14,11 +14,13 @@ import client from '../client'
 import { NftRow } from './nftRow'
 import * as ga from '../lib/ga'
 import { Nft } from '../types'
+import {NftDetails} from '../components/nftDetails'
 
 export const Viewer = () => {
   const { publicKey, signTransaction, connected } = useWallet()
   const { connection } = useConnection()
   const [nfts, setNfts] = useState<Nft[]>([])
+  const [nft, setNft] = useState<Nft | undefined>()
   const [sending, setSending] = useState<Nft[]>([])
   const [to, setTo] = useState('')
   const [search, setSearch] = useState('')
@@ -34,9 +36,21 @@ export const Viewer = () => {
         description
         animationUrl
         image
+        files {
+          uri
+          fileType
+        }
         owner {
           address
           associatedTokenAccountAddress
+        }
+        creators {
+          address
+          twitterHandle
+        }
+        attributes{
+          traitType
+          value
         }
       }
     }
@@ -117,12 +131,28 @@ export const Viewer = () => {
                     name={n.name}
                     image={n.image}
                     unselect={() => {}}
-                    select={() => {}}
+                    select={() => {
+                      setNft(n)
+                      //@ts-ignore
+                      document.getElementById('my-modal-3').checked = true
+                    }}
                     selected={false}
                   />
                 ))}
             </div>
           </div>
+        </div>
+      </div>
+      <input type='checkbox' id='my-modal-3' className='modal-toggle' />
+      <div className='modal'>
+        <div className='relative w-11/12 max-w-5xl modal-box'>
+          <label
+            htmlFor='my-modal-3'
+            className='absolute btn btn-sm btn-circle right-2 top-2'
+          >
+            ✕
+          </label>
+          <NftDetails nft={nft!}/>
         </div>
       </div>
     </div>
