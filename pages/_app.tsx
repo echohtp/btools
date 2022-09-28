@@ -28,6 +28,7 @@ import { useRouter } from 'next/router'
 import * as ga from '../lib/ga'
 import { ToastContainer } from 'react-toastify'
 
+import 'antd/dist/antd.css'
 // Default styles that can be overridden by your app
 require('@solana/wallet-adapter-react-ui/styles.css');
 
