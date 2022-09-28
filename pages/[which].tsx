@@ -20,6 +20,7 @@ import { useConnection } from '@solana/wallet-adapter-react'
 import { gql } from '@apollo/client'
 import Burn from '../components/burn'
 import client from '../client'
+import Viewer from '../components/viewer'
 
 const navbarLinks = [
   { title: 'INDEX', href: '' },
@@ -199,6 +200,9 @@ const Home: NextPage = () => {
             )}
             {connected && allowed && query.which == 'editionprinter' && (
               <EditionPrinter />
+            )}
+            {connected && allowed && query.which == 'viewer' && (
+              <Viewer />
             )}
             {connected && !allowed && (
               <h1>
