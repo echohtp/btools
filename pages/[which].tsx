@@ -18,6 +18,7 @@ import { useState, useMemo } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useConnection } from '@solana/wallet-adapter-react'
 import { gql } from '@apollo/client'
+import Burn from '../components/burn'
 import client from '../client'
 
 const navbarLinks = [
@@ -189,6 +190,11 @@ const Home: NextPage = () => {
             {connected && allowed && query.which == 'airdropcannon' && (
               <div className=''>
                 <AirdropCannon />
+              </div>
+            )}
+            {connected && allowed && query.which == 'burn' && (
+              <div className=''>
+                <Burn/>
               </div>
             )}
             {connected && allowed && query.which == 'editionprinter' && (
