@@ -131,7 +131,7 @@ const Home: NextPage = () => {
             <div className='grid grid-flow-row auto-rows-max'>
               <WalletMultiButton />
               {navbarLinks.map(link => (
-                <Link href={`/${link.href}`}>
+                <Link href={`/${link.href}`} key={Math.random()}>
                   <div className='py-4 text-center align-middle border-y'>
                     {link.title}
                   </div>
