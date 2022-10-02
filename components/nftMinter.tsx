@@ -20,8 +20,8 @@ import {
   toMetaplexFileFromBrowser
 } from '@metaplex-foundation/js'
 import { Nft } from '../types'
-import React from 'react';
-import { XCircle } from 'react-feather';
+import React from 'react'
+import { XCircle } from 'react-feather'
 
 const schema = {
   type: 'object',
@@ -254,32 +254,32 @@ const videoSchema = {
 }
 
 const UISchema = {
-  type: "VerticalLayout",
+  type: 'VerticalLayout',
   elements: [
     {
-      type: "Control",
-      scope: "#/properties/name",
-      label: "Name"
+      type: 'Control',
+      scope: '#/properties/name',
+      label: 'Name'
     },
     {
-      type: "Control",
-      scope: "#/properties/description",
-      label: "Description"
+      type: 'Control',
+      scope: '#/properties/description',
+      label: 'Description'
     },
     {
-      type: "Control",
-      scope: "#/properties/external_url",
-      label: "External URL"
+      type: 'Control',
+      scope: '#/properties/external_url',
+      label: 'External URL'
     },
     {
-      type: "Control",
-      scope: "#/properties/seller_fee_basis_points",
-      label: "Royalty Percentage"
+      type: 'Control',
+      scope: '#/properties/seller_fee_basis_points',
+      label: 'Royalty Percentage'
     },
     {
-      type: "Control",
-      scope: "#/properties/attributes",
-      label: "Attributes"
+      type: 'Control',
+      scope: '#/properties/attributes',
+      label: 'Attributes'
     }
   ]
 }
@@ -372,14 +372,14 @@ export const NftMint = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [showModal, setShowModal] = useState<boolean>(false)
   const [modalData, setModalData] = useState<any>({
-    name: "",
-    description: "",
-    symbol: "",
-    animation_url: "",
+    name: '',
+    description: '',
+    symbol: '',
+    animation_url: '',
     seller_fee_basis_points: 0,
-    image: "",
+    image: '',
     properties: {
-      category: "",
+      category: '',
       files: [],
       creators: [{ address: publicKey?.toBase58(), share: 100 }]
     }
@@ -400,90 +400,116 @@ export const NftMint = () => {
 
   const mintImage = async (data: any) => {
     // @ts-ignore
-    const selectedFile = document.getElementById('imageInput').files[0];
-    console.log(selectedFile);
+    const selectedFile = document.getElementById('imageInput').files[0]
+    console.log(selectedFile)
     if (selectedFile == undefined) {
-      toast("Please select an image")
+      toast('Please select an image')
       return
     }
-    
-    if (data.seller_fee_basis_points > 100){
-      toast("Royalty needs to be less than 100")
-      return
-    } 
-    
-    if (data.seller_fee_basis_points < 0){
-      toast("Royalty needs to be greater than 0")
-      return
-    } 
 
+    if (data.seller_fee_basis_points > 100) {
+      toast('Royalty needs to be less than 100')
+      return
+    }
+
+    if (data.seller_fee_basis_points < 0) {
+      toast('Royalty needs to be greater than 0')
+      return
+    }
 
     let mdata = data
     mdata.seller_fee_basis_points = mdata.seller_fee_basis_points * 100
     mdata.image = await toMetaplexFileFromBrowser(selectedFile)
-    mdata.properties.category = "image"
-    mdata.properties.files.push({type: "image/png", uri: mdata.image, cdn: true})
-
+    mdata.properties.category = 'image'
+    mdata.properties.files.push({
+      type: 'image/png',
+      uri: mdata.image,
+      cdn: true
+    })
+    toast("A few TX's will pop, follow these notifs for more")
     //@ts-ignore
-    document.getElementById('my-modal-3').checked = true
-    // const { uri, metadata } = await metaplex
-    // .nfts()
-    // .uploadMetadata(mdata)
-    // .run();
+    // document.getElementById('my-modal-3').checked = true
+    try {
+      const { uri, metadata } = await metaplex
+        .nfts()
+        .uploadMetadata(mdata)
+        .run()
+      toast('1/2 done')
 
-    // const { nft } = await metaplex.nfts().create({
-    //   uri: uri,
-    //   name: metadata.name!,
-    //   sellerFeeBasisPoints: metadata.seller_fee_basis_points!
-    // }).run()
+      const { nft } = await metaplex
+        .nfts()
+        .create({
+          uri: uri,
+          name: metadata.name!,
+          sellerFeeBasisPoints: metadata.seller_fee_basis_points!
+        })
+        .run()
+      toast('2/2 DONE')
+    } catch (e) {
+      toast(`ERROR: ${e.message}`)
+    }
+    toast('Minting successful!')
   }
 
   const mintVideo = async (data: any) => {
     // @ts-ignore
-    const selectedFile = document.getElementById('videoInput').files[0];
-    console.log(selectedFile);
+    const selectedFile = document.getElementById('videoInput').files[0]
+    console.log(selectedFile)
     if (selectedFile == undefined) {
-      toast("Please select a video")
+      toast('Please select a video')
       return
     }
 
-     // @ts-ignore
-     const selectedCoverFile = document.getElementById('videoCoverInput').files[0];
-     console.log(selectedCoverFile);
-     if (selectedCoverFile == undefined) {
-       toast("Please select a cover image")
-       return
-     }
+    // @ts-ignore
+    const selectedCoverFile = document.getElementById('videoCoverInput')
+      .files[0]
+    console.log(selectedCoverFile)
+    if (selectedCoverFile == undefined) {
+      toast('Please select a cover image')
+      return
+    }
 
-     if (data.seller_fee_basis_points > 100){
-      toast("Royalty needs to be less than 100")
+    if (data.seller_fee_basis_points > 100) {
+      toast('Royalty needs to be less than 100')
       return
-    } 
-    
-    if (data.seller_fee_basis_points < 0){
-      toast("Royalty needs to be greater than 0")
+    }
+
+    if (data.seller_fee_basis_points < 0) {
+      toast('Royalty needs to be greater than 0')
       return
-    } 
-    
+    }
+
     let mdata = data
     mdata.seller_fee_basis_points = mdata.seller_fee_basis_points * 100
     mdata.image = await toMetaplexFileFromBrowser(selectedCoverFile)
     mdata.animation_url = await toMetaplexFileFromBrowser(selectedFile)
-    mdata.properties.category = "video"
-    mdata.properties.files.push({type: "image/mp4", uri: mdata.animation_url, cdn: true},{type: "image/png", uri: mdata.image, cdn: true})
+    mdata.properties.category = 'video'
+    mdata.properties.files.push(
+      { type: 'image/mp4', uri: mdata.animation_url, cdn: true },
+      { type: 'image/png', uri: mdata.image, cdn: true }
+    )
+    toast("A few TX's will pop, follow these notifs for more")
+    try {
+      const { uri, metadata } = await metaplex
+        .nfts()
+        .uploadMetadata(mdata)
+        .run()
 
-    const { uri, metadata } = await metaplex
-    .nfts()
-    .uploadMetadata(mdata)
-    .run();
-
-    const { nft } = await metaplex.nfts().create({
-      uri: uri,
-      name: metadata.name!,
-      sellerFeeBasisPoints: metadata.seller_fee_basis_points!
-    }).run()
+      toast('1/2 done')
+      const { nft } = await metaplex
+        .nfts()
+        .create({
+          uri: uri,
+          name: metadata.name!,
+          sellerFeeBasisPoints: metadata.seller_fee_basis_points!
+        })
+        .run()
+      toast('2/2 DONE')
+    } catch (e) {
+      toast(`ERROR: ${e.message}`)
+    }
+    toast('Minting successful!')
   }
-
 
   const GET_NFTS = gql`
     query GetNfts(
@@ -582,10 +608,10 @@ export const NftMint = () => {
                     setStep(0)
                   }}
                 >
-                  <XCircle/>
+                  <XCircle />
                 </span>
                 <h2>Upload an image</h2>
-                <input type="file" id="imageInput"/>
+                <input type='file' id='imageInput' />
                 <JsonForms
                   schema={imageSchema}
                   data={modalData}
@@ -594,8 +620,11 @@ export const NftMint = () => {
                   cells={materialCells}
                   onChange={({ errors, data }) => setNftData(data)}
                 />
-                <button className='btn btn-secondary' onClick={(()=>mintImage(nftData))}>
-                Mint It
+                <button
+                  className='btn btn-secondary'
+                  onClick={() => mintImage(nftData)}
+                >
+                  Mint It
                 </button>
               </>
             )}
@@ -608,12 +637,12 @@ export const NftMint = () => {
                     setStep(0)
                   }}
                 >
-                  <XCircle/>
+                  <XCircle />
                 </span>
                 <h2>Upload a video</h2>
-                <input type="file" id="videoInput"/>
+                <input type='file' id='videoInput' />
                 <h2>Upload a cover image</h2>
-                <input type="file" id="videoCoverInput"/>
+                <input type='file' id='videoCoverInput' />
                 <JsonForms
                   schema={videoSchema}
                   uischema={UISchema}
@@ -622,8 +651,11 @@ export const NftMint = () => {
                   cells={materialCells}
                   onChange={({ errors, data }) => setNftData(data)}
                 />
-                <button className='btn btn-secondary' onClick={(()=>mintVideo(nftData))}>
-                Mint It
+                <button
+                  className='btn btn-secondary'
+                  onClick={() => mintVideo(nftData)}
+                >
+                  Mint It
                 </button>
               </>
             )}
@@ -639,10 +671,10 @@ export const NftMint = () => {
                   x
                 </span>
                 <h2>Upload a file</h2>
-                <input type="file" id="otherInput"/>
+                <input type='file' id='otherInput' />
                 <h2>Upload a cover image</h2>
-                <input type="file" id="otherCoverInput"/>
-                
+                <input type='file' id='otherCoverInput' />
+
                 {/* <JsonForms
                   schema={htmlSchema}
                   data={modalData}
@@ -665,10 +697,8 @@ export const NftMint = () => {
             ✕
           </label>
           <h3 className='text-lg font-bold'>Preview nft here</h3>
-          
-          <button className='btn btn-secondary'>
-            mint
-          </button>
+
+          <button className='btn btn-secondary'>mint</button>
         </div>
       </div>
     </div>
