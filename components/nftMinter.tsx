@@ -445,7 +445,7 @@ export const NftMint = () => {
         })
         .run()
       toast('2/2 DONE')
-    } catch (e) {
+    } catch (e:any) {
       toast(`ERROR: ${e.message}`)
     }
     toast('Minting successful!')
@@ -461,8 +461,7 @@ export const NftMint = () => {
     }
 
     // @ts-ignore
-    const selectedCoverFile = document.getElementById('videoCoverInput')
-      .files[0]
+    const selectedCoverFile = document.getElementById('videoCoverInput').files[0]
     console.log(selectedCoverFile)
     if (selectedCoverFile == undefined) {
       toast('Please select a cover image')
@@ -505,7 +504,7 @@ export const NftMint = () => {
         })
         .run()
       toast('2/2 DONE')
-    } catch (e) {
+    } catch (e:any) {
       toast(`ERROR: ${e.message}`)
     }
     toast('Minting successful!')
