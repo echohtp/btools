@@ -1,6 +1,11 @@
 import { useState, useMemo } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { Connection, clusterApiUrl, PublicKey, Transaction } from '@solana/web3.js'
+import {
+  Connection,
+  clusterApiUrl,
+  PublicKey,
+  Transaction
+} from '@solana/web3.js'
 import { Metaplex, walletAdapterIdentity } from '@metaplex-foundation/js'
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 import { Button } from 'antd'
@@ -23,7 +28,7 @@ import {
 export const AirdropCannon = () => {
   const connection = new Connection(clusterApiUrl('mainnet-beta'))
   const wallet = useWallet()
-  const {publicKey, signTransaction} = useWallet()
+  const { publicKey, signTransaction } = useWallet()
   const [loading, setLoading] = useState<boolean>(false)
   const initData = { destinationAddress: wallet.publicKey?.toBase58() }
   const [data, setData] = useState<any>(initData)
@@ -47,6 +52,9 @@ export const AirdropCannon = () => {
         name
         description
         image
+        creators {
+          address
+        }
         owner {
           address
           associatedTokenAccountAddress
@@ -76,103 +84,119 @@ export const AirdropCannon = () => {
 
   const shipIt = async () => {
     console.log(data)
-    if (nfts.length == 0 || data.destinationAddress == ''|| !publicKey || !signTransaction ) {
+    if (
+      nfts.length == 0 ||
+      data.destinationAddress == '' ||
+      !publicKey ||
+      !signTransaction
+    ) {
       toast('data needed')
       return
     }
 
-
     setLoading(true)
     try {
+      // filter out banana and graffito nfts
+      let tNfts = []
+      for(var i =0; i < nfts.length; i++){
+        let tNft = nfts[i]
+        let tCreators = tNft.creators.map((c:any)=>c.address)
+        console.log(tCreators)
+        if ( !(tCreators.includes('232PpcrPc6Kz7geafvbRzt5HnHP4kX88yvzUCN69WXQC') || tCreators.includes('465Av5qxktim1iN9p54k41MbRGPe2nqCfyVYwB2EF84J'))){
+          tNfts.push(tNft)
+        }
+      }
       
+      console.log('nfts: ', nfts.length)
+      console.log('tnfts: ', tNfts.length)
 
       const owners = data.destinationAddress.split(',')
         ? data.destinationAddress.replace(/(^,)|(,$)/g, '').split(',')
         : data.destinationAddress
-      
-      if (nfts.length != owners.length){
+
+      if (tNfts.length != owners.length) {
         toast('number of nfts doesnt match address list')
-        toast(`${nfts.length} != ${owners.length}`)
-        setLoading(false)
-        return 
-      }
-      
-      const tx = new Transaction()
-
-      for (var i =0;i < owners.length; i++){
-        const mintPublicKey = new PublicKey(nfts[i].mintAddress)
-          const fromTokenAccount = await getAssociatedTokenAddress(
-            mintPublicKey,
-            publicKey
-          )
-          const fromPublicKey = publicKey
-          const destPublicKey = new PublicKey(owners[i])
-          const destTokenAccount = await getAssociatedTokenAddress(
-            mintPublicKey,
-            destPublicKey
-          )
-          const receiverAccount = await connection.getAccountInfo(
-            destTokenAccount
-          )
-
-
-          console.log(`sending ${mintPublicKey.toBase58()} to ${destPublicKey.toBase58()}`)
-
-          if (receiverAccount === null) {
-            tx.add(
-              createAssociatedTokenAccountInstruction(
-                fromPublicKey,
-                destTokenAccount,
-                destPublicKey,
-                mintPublicKey,
-                TOKEN_PROGRAM_ID,
-                ASSOCIATED_TOKEN_PROGRAM_ID
-              )
-            )
-          }
-
-          tx.add(
-            createTransferInstruction(
-              fromTokenAccount,
-              destTokenAccount,
-              fromPublicKey,
-              1
-            )
-          )
-          tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
-          tx.feePayer = publicKey
-
-      let signed: Transaction | undefined = undefined
-
-      try {
-        signed = await signTransaction(tx)
-      } catch (e:any) {
-        toast(e.message)
+        toast(`${tNfts.length} != ${owners.length}`)
         setLoading(false)
         return
       }
 
-      let signature: string | undefined = undefined
+      const tx = new Transaction()
 
-      try {
-        signature = await connection.sendRawTransaction(signed.serialize())
-        await connection.confirmTransaction(signature, 'confirmed')
+      for (var i = 0; i < owners.length; i++) {
+        const mintPublicKey = new PublicKey(tNfts[i].mintAddress)
+        const fromTokenAccount = await getAssociatedTokenAddress(
+          mintPublicKey,
+          publicKey
+        )
+        const fromPublicKey = publicKey
+        const destPublicKey = new PublicKey(owners[i])
+        const destTokenAccount = await getAssociatedTokenAddress(
+          mintPublicKey,
+          destPublicKey
+        )
+        const receiverAccount = await connection.getAccountInfo(
+          destTokenAccount
+        )
 
-        toast.success('Transaction successful')
-      } catch (e:any) {
-        toast.error(e.message)
-        setLoading(false)
-        ga.event({
-          action: 'multisend_error',
-          params: { msg: e.message }
-        })
-      }
+        console.log(
+          `sending ${mintPublicKey.toBase58()} to ${destPublicKey.toBase58()}`
+        )
 
+        if (receiverAccount === null) {
+          tx.add(
+            createAssociatedTokenAccountInstruction(
+              fromPublicKey,
+              destTokenAccount,
+              destPublicKey,
+              mintPublicKey,
+              TOKEN_PROGRAM_ID,
+              ASSOCIATED_TOKEN_PROGRAM_ID
+            )
+          )
+        }
+
+        tx.add(
+          createTransferInstruction(
+            fromTokenAccount,
+            destTokenAccount,
+            fromPublicKey,
+            1
+          )
+        )
+        tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
+        tx.feePayer = publicKey
+
+        let signed: Transaction | undefined = undefined
+
+        try {
+          signed = await signTransaction(tx)
+        } catch (e) {
+          toast(e.message)
+          setLoading(false)
+          return
+        }
+
+        let signature: string | undefined = undefined
+
+        try {
+          signature = await connection.sendRawTransaction(signed.serialize())
+          await connection.confirmTransaction(signature, 'confirmed')
+
+          toast.success('Transaction successful')
+        } catch (e) {
+          toast.error(e.message)
+          setLoading(false)
+          ga.event({
+            action: 'multisend_error',
+            params: { msg: e.message }
+          })
+        }
       } // end of owners for loop
-      
+
       toast('done!')
       ga.event({ action: 'airdrop_cannon', params: { length: nfts.length } })
-    } catch (e: any) {
+    } catch (e) {
       toast(`error: ${e.message}`)
       console.error(e.message)
       setLoading(false)
