@@ -47,7 +47,7 @@ export const QuickFix = () => {
       let nft: Nft
       try {
         nft = await metaplex.nfts().findByMint(new PublicKey(data.mint)).run()
-      }catch (e){
+      }catch (e:any){
         alert("couldnt load nft from mint")
         return
       }
@@ -65,12 +65,12 @@ export const QuickFix = () => {
             .run()
           console.log('updated!')
           console.log(updatedNft.nft.mintAddress.toBase58())
-        } catch (e) {
+        } catch (e:any) {
           console.log(e)
         }
         setLoading(false)
       })
-    } catch (e) {
+    } catch (e:any) {
       alert("couldnt load url")
       console.error(e)
       setLoading(false)

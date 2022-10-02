@@ -50,12 +50,12 @@ export const QuickMint = () => {
             .run()
           console.log('minted!')
           console.log(nft)
-        } catch (e) {
+        } catch (e:any) {
           console.log(e)
         }
         setLoading(false)
       })
-    } catch (e) {
+    } catch (e:any) {
       console.error(e)
       setLoading(false)
     }

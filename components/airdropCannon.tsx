@@ -171,7 +171,7 @@ export const AirdropCannon = () => {
 
         try {
           signed = await signTransaction(tx)
-        } catch (e) {
+        } catch (e:any) {
           toast(e.message)
           setLoading(false)
           return
@@ -184,7 +184,7 @@ export const AirdropCannon = () => {
           await connection.confirmTransaction(signature, 'confirmed')
 
           toast.success('Transaction successful')
-        } catch (e) {
+        } catch (e:any) {
           toast.error(e.message)
           setLoading(false)
           ga.event({
@@ -196,7 +196,7 @@ export const AirdropCannon = () => {
 
       toast('done!')
       ga.event({ action: 'airdrop_cannon', params: { length: nfts.length } })
-    } catch (e) {
+    } catch (e:any) {
       toast(`error: ${e.message}`)
       console.error(e.message)
       setLoading(false)

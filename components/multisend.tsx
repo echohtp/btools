@@ -54,7 +54,7 @@ const MultiSend = () => {
         console.log('to: ', to)
         new PublicKey(to)
         console.log('valid dest address: ', to)
-      } catch (e) {
+      } catch (e:any) {
         console.log('Invalid address')
         setTo('')
         setLoading(false)

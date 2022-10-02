@@ -73,7 +73,7 @@ export const Viewer = () => {
           action: 'viewer_load',
           params: { who: viewer }
         })
-    } catch (e) {
+    } catch (e:any) {
       if (publicKey) {
         client
           .query({
