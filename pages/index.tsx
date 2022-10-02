@@ -15,6 +15,7 @@ const navbarLinks = [
   { title: 'MASS SEND', href: 'multisend' },
   { title: 'MINT HASH', href: 'minthash' },
   { title: 'NFT EDITOR', href: 'editor' },
+  { title: 'NFT MINTER', href: 'nftmint' },
   { title: 'QUICK FIX', href: 'quickfix' },
   { title: 'QUICK MINT', href: 'quickmint' },
   { title: 'VIEWER', href: 'viewer' },

@@ -21,6 +21,7 @@ import { gql } from '@apollo/client'
 import Burn from '../components/burn'
 import client from '../client'
 import Viewer from '../components/viewer'
+import NftMint from '../components/nftMinter'
 
 const navbarLinks = [
   { title: 'INDEX', href: '' },
@@ -33,6 +34,7 @@ const navbarLinks = [
   { title: 'MASS SEND', href: 'multisend' },
   { title: 'MINT HASH', href: 'minthash' },
   { title: 'NFT EDITOR', href: 'editor' },
+  { title: 'NFT MINTER', href: 'nftmint' },
   { title: 'QUICK FIX', href: 'quickfix' },
   { title: 'QUICK MINT', href: 'quickmint' },
   { title: 'VIEWER', href: 'viewer' }
@@ -159,6 +161,11 @@ const Home: NextPage = () => {
             {connected && allowed && query.which == 'multisend' && (
               <div className=''>
                 <MultiSend />
+              </div>
+            )}
+            {connected && allowed && query.which == 'nftmint' && (
+              <div className=''>
+                <NftMint/>
               </div>
             )}
             {connected && allowed && query.which == 'quickfix' && (
