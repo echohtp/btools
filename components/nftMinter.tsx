@@ -445,10 +445,10 @@ export const NftMint = () => {
         })
         .run()
       toast('2/2 DONE')
+      toast('Minting successful!')
     } catch (e:any) {
       toast(`ERROR: ${e.message}`)
     }
-    toast('Minting successful!')
   }
 
   const mintVideo = async (data: any) => {
@@ -504,10 +504,10 @@ export const NftMint = () => {
         })
         .run()
       toast('2/2 DONE')
+      toast('Minting successful!')
     } catch (e:any) {
       toast(`ERROR: ${e.message}`)
     }
-    toast('Minting successful!')
   }
 
   const GET_NFTS = gql`
