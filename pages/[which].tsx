@@ -22,6 +22,7 @@ import Burn from '../components/burn'
 import client from '../client'
 import Viewer from '../components/viewer'
 import NftMint from '../components/nftMinter'
+import CreateCandyMachine from '../components/createCandymachine'
 
 const navbarLinks = [
   { title: 'INDEX', href: '' },
@@ -29,6 +30,7 @@ const navbarLinks = [
   { title: 'BURN', href: 'burn' },
   { title: 'CHANGE UA', href: 'updateua' },
   { title: 'CLOSE ACCTS', href: 'closeaccts' },
+  { title: 'CREATE CANDY MACHINES', href: 'createcm' },
   { title: 'EDITION PRINTER', href: 'editionprinter' },
   { title: 'HOLDER SNAPSHOT', href: 'holdersnapshot' },
   { title: 'MASS SEND', href: 'multisend' },
@@ -214,6 +216,9 @@ const Home: NextPage = () => {
             )}
             {connected && allowed && query.which == 'viewer' && (
               <Viewer />
+            )}
+            {connected && allowed && query.which == 'createcm' && (
+              <CreateCandyMachine />
             )}
             {connected && !allowed && (
               <h1>
