@@ -41,7 +41,7 @@ export const QuickFix = () => {
     }
 
     setLoading(true)
-    const mints = data.mint.split(',')
+    const mints = data.mint.replace(/(^,)|(,$)/g, '').split(',')
     toast(mints.length)
     try {
       const metaplex = Metaplex.make(connection).use(
