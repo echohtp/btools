@@ -6,6 +6,7 @@ import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 import { Button } from 'antd'
 import axios from 'axios'
 import { JsonForms } from '@jsonforms/react'
+import { toast } from 'react-toastify'
 
 const schema = {
   type: 'object',
@@ -21,7 +22,7 @@ const schema = {
 }
 
 export const QuickFix = () => {
-  const initData = { url: '' , mint: ''}
+  const initData = { url: '', mint: '' }
   const connection = new Connection(clusterApiUrl('mainnet-beta'))
   const wallet = useWallet()
   const [loading, setLoading] = useState<boolean>(false)
@@ -29,52 +30,59 @@ export const QuickFix = () => {
 
   const mintIt = async () => {
     console.log(data)
-    if (data.url.length === 0 || !data.mint || data.mint == "" ) {
+    if (data.url.length === 0 || !data.mint || data.mint == '') {
       alert('Please enter a metadata URL')
       return
     }
 
-    if (!data.mint || data.mint == "" ) {
+    if (!data.mint || data.mint == '') {
       alert('Please enter a mint hash')
       return
     }
-    
+
     setLoading(true)
+    const mints = data.mint.split(',')
+    toast(mints.length)
     try {
       const metaplex = Metaplex.make(connection).use(
         walletAdapterIdentity(wallet)
       )
+
       let nft: Nft
-      try {
-        nft = await metaplex.nfts().findByMint(new PublicKey(data.mint)).run()
-      }catch (e:any){
-        alert("couldnt load nft from mint")
-        return
-      }
-      console.log('gonna try and fix this!')
-      console.log(data.url)
-      axios.get(data.url).then(async d => {
+      
+      for (var i = 0; i < mints.length; i++) {
+        try {
+          nft = await metaplex
+            .nfts()
+            .findByMint(new PublicKey(mints[i]))
+            .run()
+        } catch (e) {
+          alert('couldnt load nft from mint')
+          return
+        }
+        console.log('gonna try and fix this!')
+        console.log(data.url)
+        toast("Updating: ", mints[i])
+        // need logic to detect of metadata is the same and skip
         try {
           const updatedNft = await metaplex
             .nfts()
             .update(nft, {
-              name: d.data.name,
-              uri: data.url,
-              sellerFeeBasisPoints: d.data.seller_fee_basis_points
+              uri: data.url
             })
             .run()
           console.log('updated!')
           console.log(updatedNft.nft.mintAddress.toBase58())
-        } catch (e:any) {
+        } catch (e) {
           console.log(e)
         }
-        setLoading(false)
-      })
-    } catch (e:any) {
-      alert("couldnt load url")
+      }
+    } catch (e) {
+      alert('couldnt load url')
       console.error(e)
       setLoading(false)
     }
+    setLoading(false)
   }
 
   return (
