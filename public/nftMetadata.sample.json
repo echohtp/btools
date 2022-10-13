@@ -1,0 +1,33 @@
+{
+    "name": "",
+    "symbol": "",
+    "description": "",
+    "seller_fee_basis_points": 1000,
+    "image": "",
+    "attributes": [
+      {
+        "trait_type": "Type",
+        "value": "Value"
+      },
+      {
+        "trait_type": "Size",
+        "value": "Small"
+      }
+    ],
+    "external_url": "",
+    "properties": {
+      "category": "image",
+      "files": [
+        {
+          "uri": "",
+          "type": "image/png"
+        }
+      ],
+      "creators": [
+        {
+          "address": "",
+          "share": 100
+        }
+      ]
+    }
+}

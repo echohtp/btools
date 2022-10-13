@@ -107,7 +107,7 @@ export const QuickMint = () => {
           onChange={({ errors, data }) => setData(data)}
         />
         <input type='file' id='jsonFile' />
-
+        <br/>
         <Button
           loading={loading}
           onClick={mintIt}
@@ -115,6 +115,8 @@ export const QuickMint = () => {
         >
           mint it
         </Button>
+        <br/>
+        <small><a href='nftMetadata.sample.json' target="_blank">Sample JSON File</a></small>
       </div>
     </>
   )
