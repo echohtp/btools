@@ -116,7 +116,8 @@ export const QuickMint = () => {
           mint it
         </Button>
         <br/>
-        <small><a href='nftMetadata.sample.json' target="_blank">Sample JSON File</a></small>
+        <small>Sample JSON Files: [<a href='imageNftMetadata.sample.json' target="_blank">Image</a>] [<a href='videoNftMetadata.sample.json' target="_blank">Video</a>]
+        </small>
       </div>
     </>
   )

@@ -1,0 +1,40 @@
+{
+    "name": "",
+    "symbol": "",
+    "description": "",
+    "seller_fee_basis_points": 1000,
+    "image": "",
+    "animation_url": "",
+    "attributes": [
+      {
+        "trait_type": "Type",
+        "value": "Value"
+      },
+      {
+        "trait_type": "Size",
+        "value": "Small"
+      }
+    ],
+    "external_url": "",
+    "properties": {
+      "category": "video",
+      "files": [
+        {
+          "uri": "",
+          "type": "image/png",
+          "cdn": "false"
+        },
+        {
+          "uri": "",
+          "type": "video/mp4",
+          "cdn": "true"
+        }
+      ],
+      "creators": [
+        {
+          "address": "",
+          "share": 100
+        }
+      ]
+    }
+}
