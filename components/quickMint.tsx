@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { Connection, clusterApiUrl } from '@solana/web3.js'
-import { Metaplex, walletAdapterIdentity } from '@metaplex-foundation/js'
+import { Metaplex, walletAdapterIdentity, toMetaplexFileFromBrowser } from '@metaplex-foundation/js'
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 import { Button } from 'antd'
 import axios from 'axios'
@@ -26,36 +26,70 @@ export const QuickMint = () => {
 
   const mintIt = async () => {
     console.log(data)
-    if (data.url.length === 0) {
-      alert('Please enter a metadata URL')
+    //@ts-ignore
+    const selectedFile = document.getElementById('jsonFile').files[0]
+    console.log(selectedFile)
+    if (data.url == undefined && selectedFile == undefined) {
+      alert('Please enter a metadata source')
       return
     }
+
     setLoading(true)
     try {
       const metaplex = Metaplex.make(connection).use(
         walletAdapterIdentity(wallet)
       )
       console.log(wallet.publicKey?.toBase58())
-      console.log('gonna try and mint this!')
-      console.log(data.url)
-      axios.get(data.url).then(async d => {
+      if (selectedFile) {
+        console.log('gonna try and mint this file')
+        console.log(selectedFile)
+        const file = await toMetaplexFileFromBrowser(selectedFile)
+        const json = JSON.parse(file.buffer.toString())
+        const { uri, metadata } = await metaplex
+        .nfts()
+        .uploadMetadata(json)
+        .run()
+        console.log(json)
         try {
           const nft = await metaplex
             .nfts()
             .create({
-              name: d.data.name,
-              uri: data.url,
-              sellerFeeBasisPoints: d.data.seller_fee_basis_points
+              name: json.name,
+              uri: uri,
+              sellerFeeBasisPoints: json.seller_fee_basis_points,
+              symbol: json.symbol
             })
             .run()
           console.log('minted!')
           console.log(nft)
-        } catch (e:any) {
+        } catch (e) {
           console.log(e)
         }
         setLoading(false)
-      })
-    } catch (e:any) {
+        
+        
+      } else {
+        console.log('gonna try and mint this!')
+        console.log(data.url)
+        axios.get(data.url).then(async d => {
+          try {
+            const nft = await metaplex
+              .nfts()
+              .create({
+                name: d.data.name,
+                uri: data.url,
+                sellerFeeBasisPoints: d.data.seller_fee_basis_points
+              })
+              .run()
+            console.log('minted!')
+            console.log(nft)
+          } catch (e) {
+            console.log(e)
+          }
+          setLoading(false)
+        })
+      }
+    } catch (e) {
       console.error(e)
       setLoading(false)
     }
@@ -72,6 +106,7 @@ export const QuickMint = () => {
           cells={materialCells}
           onChange={({ errors, data }) => setData(data)}
         />
+        <input type='file' id='jsonFile' />
 
         <Button
           loading={loading}
