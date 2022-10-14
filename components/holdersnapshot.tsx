@@ -112,7 +112,7 @@ useMemo(() => {
           <div className='w-full mb-4'>
             <input
               type='text'
-              placeholder='View inside a wallet...'
+              placeholder='Search for this creator wallet pubkey...'
               className='w-11/12 input input-bordered input-secondary'
               onChange={e => setViewer(e.target.value)}
             />{sending.length > 0 ? <button onClick={()=>{
