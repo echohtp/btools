@@ -12,7 +12,7 @@ interface NftRowProps {
   unselect(): void
   selected: Boolean
   showHidden?: Boolean
-  owner?: string
+  owner?: any
 }
 
 export const NftRow = (props: NftRowProps) => {
@@ -34,7 +34,9 @@ export const NftRow = (props: NftRowProps) => {
         <div className='truncate stat-title'>{props.name}</div>
         {props.owner && (
           <div className='text-gray-400 stat-desc'>
-            owner: {showfirstandlastfour(props.owner)}
+            <span>owner: {showfirstandlastfour(props.owner.address)}</span><br/>
+            { props.owner.twitterHandle && <span>@{props.owner.twitterHandle}</span> }
+
           </div>
         )}
         <div className='stat-figure text-secondary'>

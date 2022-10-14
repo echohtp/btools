@@ -48,7 +48,7 @@ const HolderSnapshot = () => {
 
   const GET_NFTS = gql`
   query GetNfts($owners: [PublicKey!], $limit: Int!, $offset: Int!) {
-    nfts(owners: $owners, limit: $limit, offset: $offset) {
+    nfts(creators: $owners, limit: $limit, offset: $offset) {
       address
       mintAddress
       name
@@ -57,6 +57,7 @@ const HolderSnapshot = () => {
       owner {
         address
         associatedTokenAccountAddress
+        twitterHandle
       }
     }
   }
@@ -69,7 +70,7 @@ useMemo(() => {
       .query({
         query: GET_NFTS,
         variables: {
-          owners: [publicKey?.toBase58()],
+          creators: [publicKey?.toBase58()],
           offset: 0,
           limit: 10000
         }
@@ -138,7 +139,7 @@ useMemo(() => {
                 // .filter(n => n.name.toLowerCase().includes(search.toLowerCase()))
                 .map(n => (
                   <NftRow
-                    owner={n.owner.address}
+                    owner={n.owner}
                     key={Math.random()}
                     name={n.name}
                     image={n.image}
