@@ -19,6 +19,7 @@ const navbarLinks = [
   { title: 'QUICK FIX', href: 'quickfix' },
   { title: 'QUICK MINT', href: 'quickmint' },
   { title: 'VIEWER', href: 'viewer' },
+  { title: 'CANDY MACHINE MINTS', href: 'cmmints' }
 ]
 
 

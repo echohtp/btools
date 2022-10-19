@@ -110,12 +110,13 @@ useMemo(() => {
 
           <div className='container px-4'>
           <div className='w-full mb-4'>
-            <input
+            {/* <input
               type='text'
               placeholder='Search for this creator wallet pubkey...'
               className='w-11/12 input input-bordered input-secondary'
               onChange={e => setViewer(e.target.value)}
-            />{sending.length > 0 ? <button onClick={()=>{
+            /> */}
+            {sending.length > 0 ? <button onClick={()=>{
               //@ts-ignore  
               document.getElementById("my-drawer").checked = true
             }} className="mx-3 btn btn-secondary">{sending.length}</button> : <button className="mx-3 btn btn-secondary">{sending.length}</button> }

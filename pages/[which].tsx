@@ -22,6 +22,7 @@ import Burn from '../components/burn'
 import client from '../client'
 import Viewer from '../components/viewer'
 import NftMint from '../components/nftMinter'
+import CandyMachineMints from '../components/candyMachineMints'
 
 const navbarLinks = [
   { title: 'INDEX', href: '' },
@@ -37,7 +38,8 @@ const navbarLinks = [
   { title: 'NFT MINTER', href: 'nftmint' },
   { title: 'QUICK FIX', href: 'quickfix' },
   { title: 'QUICK MINT', href: 'quickmint' },
-  { title: 'VIEWER', href: 'viewer' }
+  { title: 'VIEWER', href: 'viewer' },
+  { title: 'CANDY MACHINE MINTS', href: 'cmmints' }
 ]
 
 const Sidebar = () => {
@@ -214,6 +216,9 @@ const Home: NextPage = () => {
             )}
             {connected && allowed && query.which == 'viewer' && (
               <Viewer />
+            )}
+            {connected && allowed && query.which == 'cmmints' && (
+              <CandyMachineMints/>
             )}
             {connected && !allowed && (
               <h1>
