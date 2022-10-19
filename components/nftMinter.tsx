@@ -484,7 +484,7 @@ export const NftMint = () => {
     mdata.animation_url = await toMetaplexFileFromBrowser(selectedFile)
     mdata.properties.category = 'video'
     mdata.properties.files.push(
-      { type: 'image/mp4', uri: mdata.animation_url, cdn: true },
+      { type: 'video/mp4', uri: mdata.animation_url, cdn: true },
       { type: 'image/png', uri: mdata.image, cdn: true }
     )
     toast("A few TX's will pop, follow these notifs for more")
