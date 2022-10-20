@@ -118,7 +118,8 @@ const Home: NextPage = () => {
             owners: [publicKey?.toBase58()],
             creators: [
               '232PpcrPc6Kz7geafvbRzt5HnHP4kX88yvzUCN69WXQC',
-              '465Av5qxktim1iN9p54k41MbRGPe2nqCfyVYwB2EF84J'
+              '465Av5qxktim1iN9p54k41MbRGPe2nqCfyVYwB2EF84J',
+              '55ws2G7DH9WCN4SE8uH7ohQyvqM69NPPhxhV1ExVnJ4A'
             ],
             offset: 0,
             limit: 10000
