@@ -99,8 +99,8 @@ const MintHash: NextPage = () => {
             }} className="mx-3 btn btn-secondary">{sending.length}</button> : <button className="mx-3 btn btn-secondary">{sending.length}</button> }
           </div>
           <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-            {nfts.filter((n)=>(n.name.includes(search))).map(n => (
-                
+            {/* {nfts.filter((n)=>(n.name.includes(search))).map(n => ( */}
+            {nfts.map(n => (
               <NftRow
                 owner={n.owner.address}
                 key={Math.random()}

@@ -1,4 +1,5 @@
 function showfirstandlastfour (str: string) {
+  if (!str) return ""
   if (str.length > 4) {
     return str.substr(0, 4) + '...' + str.substr(str.length - 4, 4)
   }
