@@ -102,7 +102,7 @@ export const AirdropCannon = () => {
         let tNft = nfts[i]
         let tCreators = tNft.creators.map((c:any)=>c.address)
         console.log(tCreators)
-        if ( !(tCreators.includes('232PpcrPc6Kz7geafvbRzt5HnHP4kX88yvzUCN69WXQC') || tCreators.includes('55ws2G7DH9WCN4SE8uH7ohQyvqM69NPPhxhV1ExVnJ4A') || tCreators.includes('465Av5qxktim1iN9p54k41MbRGPe2nqCfyVYwB2EF84J'))){
+        if ( !(tCreators.includes('232PpcrPc6Kz7geafvbRzt5HnHP4kX88yvzUCN69WXQC') || tCreators.includes('7R3XCk3wkUXwiH9VtejXJvHnjhPeVaEs3MPxHdKwZwP8') || tCreators.includes('55ws2G7DH9WCN4SE8uH7ohQyvqM69NPPhxhV1ExVnJ4A') || tCreators.includes('465Av5qxktim1iN9p54k41MbRGPe2nqCfyVYwB2EF84J'))){
           tNfts.push(tNft)
         }
       }
