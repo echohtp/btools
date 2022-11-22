@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { Navbar } from './navbar'
 import { useMemo, useState } from 'react'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { Transaction, PublicKey } from '@solana/web3.js'
+import { Transaction, PublicKey, Connection } from '@solana/web3.js'
 import { gql } from '@apollo/client'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -100,7 +100,7 @@ const schema = {
 export const NftEdit = () => {
   const wallet = useWallet()
   const { publicKey, signTransaction, connected } = useWallet()
-  const { connection } = useConnection()
+  const connection = new Connection(process.env.NEXT_PUBLIC_RPC!)
   const [nfts, setNfts] = useState<Nft[]>([])
   const [sending, setSending] = useState<Nft[]>([])
   const [to, setTo] = useState('')
