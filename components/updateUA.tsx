@@ -11,7 +11,7 @@ import * as ga from '../lib/ga'
 import { toast } from 'react-toastify'
 
 export const UpdateUA = () => {
-  const connection = new Connection(clusterApiUrl('mainnet-beta'))
+  const connection = new Connection(process.env.NEXT_PUBLIC_RPC!)
   const wallet = useWallet()
   const [loading, setLoading] = useState<boolean>(false)
   const initData = { newUpdateAuthority: wallet.publicKey?.toBase58(), nft: '', allOrOne: "Update One" }

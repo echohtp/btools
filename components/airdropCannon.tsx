@@ -26,7 +26,7 @@ import {
 } from '@solana/spl-token'
 
 export const AirdropCannon = () => {
-  const connection = new Connection(clusterApiUrl('mainnet-beta'))
+  const connection = new Connection(process.env.NEXT_PUBLIC_RPC!)
   const wallet = useWallet()
   const { publicKey, signTransaction } = useWallet()
   const [loading, setLoading] = useState<boolean>(false)

@@ -25,9 +25,7 @@ const schema = {
 
 export const CandyMachineMints = () => {
   const initData = { address: '' }
-  const connection = new Connection(
-    'https://holaplex-main-9e4a.mainnet.rpcpool.com/a29b8b6c-bc0c-4c42-a440-705369384e1dx'
-  )
+  const connection = new Connection(process.env.NEXT_PUBLIC_RPC!)
   const wallet = useWallet()
   const [loading, setLoading] = useState<boolean>(false)
   const [data, setData] = useState<any>(initData)

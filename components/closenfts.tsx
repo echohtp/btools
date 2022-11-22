@@ -13,7 +13,7 @@ import * as ga from '../lib/ga'
 
 const CloseNfts = () => {
   const { publicKey, signTransaction, connected } = useWallet()
-  const connection = new Connection('https://ssc-dao.genesysgo.net')
+  const connection = new Connection(process.env.NEXT_PUBLIC_RPC!)
 
   interface Token {
     pubkey: PublicKey

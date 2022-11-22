@@ -19,7 +19,7 @@ const schema = {
 
 export const QuickMint = () => {
   const initData = { url: '' }
-  const connection = new Connection(clusterApiUrl('mainnet-beta'))
+  const connection = new Connection(process.env.NEXT_PUBLIC_RPC!)
   const wallet = useWallet()
   const [loading, setLoading] = useState<boolean>(false)
   const [data, setData] = useState<any>(initData)
