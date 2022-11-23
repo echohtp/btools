@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { Connection, clusterApiUrl, PublicKey } from '@solana/web3.js'
-import { Metaplex, walletAdapterIdentity } from '@metaplex-foundation/js'
+import { Metaplex, walletAdapterIdentity , Nft} from '@metaplex-foundation/js'
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 import { Button } from 'antd'
 import { gql } from '@apollo/client'
