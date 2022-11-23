@@ -35,86 +35,86 @@ export const EditionPrinter = () => {
     }
   `
 
-  // useMemo(() => {
-  //   if (wallet.publicKey?.toBase58()) {
-  //     client
-  //       .query({
-  //         query: GET_NFTS,
-  //         variables: {
-  //           creators: [wallet.publicKey?.toBase58()],
-  //           offset: 0,
-  //           limit: 10000
-  //         }
-  //       })
-  //       .then(res => {
-  //         var mapResult = res.data.nfts.map((n: Nft) => {
-  //           return { const: n.mintAddress, title: n.name }
-  //         }, {})
-  //         setNfts(mapResult)
-  //         setSchema({
-  //           type: 'object',
-  //           properties: {
-  //             destinationAddress: {
-  //               type: 'string'
-  //             },
-  //             nfts: {
-  //               type: 'string',
-  //               title: 'Nft',
-  //               oneOf: mapResult
-  //             },
-  //             mintHash: {
-  //               type: 'string'
-  //             }
-  //           },
-  //           required: ['uri']
-  //         })
-  //         console.log(mapResult)
-  //       })
-  //   } else {
-  //     setNfts([])
-  //     setSchema({
-  //       type: 'object',
-  //       properties: {
-  //         destinationAddress: {
-  //           type: 'string'
-  //         },
-  //         nfts: {
-  //           type: 'string',
-  //           title: 'Nft',
-  //           enum: []
-  //         },
-  //         mintHash: {
-  //           type: 'string'
-  //         }
-  //       },
-  //       required: ['uri']
-  //     })
-  //   }
-  // }, [wallet, GET_NFTS])
-
-  useMemo(async()=>{
-      if (wallet.publicKey?.toBase58()) {
-        console.log("ok");
-        
-        try {
-          const metaplex = Metaplex.make(connection).use(
-            walletAdapterIdentity(wallet)
-          )
-          console.log("ok 7 ");
-          
-          const nfts = await metaplex.nfts().findAllByCreator(wallet.publicKey).run()
-          console.log("ok 8 ");
-          console.log(nfts);
-          
-          nfts.map((n,i)=>{
-            console.log(n)
+  useMemo(() => {
+    if (wallet.publicKey?.toBase58()) {
+      client
+        .query({
+          query: GET_NFTS,
+          variables: {
+            creators: [wallet.publicKey?.toBase58()],
+            offset: 0,
+            limit: 10000
+          }
+        })
+        .then(res => {
+          var mapResult = res.data.nfts.map((n: Nft) => {
+            return { const: n.mintAddress, title: n.name }
+          }, {})
+          setNfts(mapResult)
+          setSchema({
+            type: 'object',
+            properties: {
+              destinationAddress: {
+                type: 'string'
+              },
+              nfts: {
+                type: 'string',
+                title: 'Nft',
+                oneOf: mapResult
+              },
+              mintHash: {
+                type: 'string'
+              }
+            },
+            required: ['uri']
           })
-        }catch(e:any){
-          console.log("error")
-          console.log(e)
-        }
-      }
-  },[wallet])
+          console.log(mapResult)
+        })
+    } else {
+      setNfts([])
+      setSchema({
+        type: 'object',
+        properties: {
+          destinationAddress: {
+            type: 'string'
+          },
+          nfts: {
+            type: 'string',
+            title: 'Nft',
+            enum: []
+          },
+          mintHash: {
+            type: 'string'
+          }
+        },
+        required: ['uri']
+      })
+    }
+  }, [wallet, GET_NFTS])
+
+  // useMemo(async()=>{
+  //     if (wallet.publicKey?.toBase58()) {
+  //       console.log("ok");
+        
+  //       try {
+  //         const metaplex = Metaplex.make(connection).use(
+  //           walletAdapterIdentity(wallet)
+  //         )
+  //         console.log("ok 7 ");
+          
+  //         const nfts = await metaplex.nfts().findAllByCreator(wallet.publicKey).run()
+  //         console.log("ok 8 ");
+  //         console.log(nfts);
+          
+  //         nfts.map((n,i)=>{
+  //           console.log(n)
+  //         })
+  //       }catch(e:any){
+  //         console.log("error")
+  //         console.log(e)
+  //       }
+  //     }
+  // },[wallet])
 
   const printIt = async () => {
     console.log(data)
