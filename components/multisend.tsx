@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { Navbar } from './navbar'
 import { useMemo, useState } from 'react'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { Transaction, PublicKey } from '@solana/web3.js'
+import { Transaction, PublicKey, Connection } from '@solana/web3.js'
 import { gql } from '@apollo/client'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -25,7 +25,7 @@ import { Nft } from '../types'
 
 const MultiSend = () => {
   const { publicKey, signTransaction, connected } = useWallet()
-  const { connection } = useConnection()
+  const connection = new Connection(process.env.NEXT_PUBLIC_RPC!)
   const [nfts, setNfts] = useState<Nft[]>([])
   const [sending, setSending] = useState<Nft[]>([])
   const [to, setTo] = useState('')
@@ -75,7 +75,7 @@ const MultiSend = () => {
     }
 
     toast(`trying to send ${list.length} nfts`)
-    toast(`breaking that up into ${Math.ceil(list.length / 7)} transactions`)
+    toast(`breaking that up into ${Math.floor(list.length / 7)} transactions`)
     for (var i = 0; i < list.length / 6; i++) {
       const tx = new Transaction()
       for (var j = 0; j < 6; j++) {
