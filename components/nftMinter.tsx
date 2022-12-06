@@ -364,7 +364,7 @@ const htmlSchema = {
 export const NftMint = () => {
   const wallet = useWallet()
   const { publicKey, signTransaction, connected } = useWallet()
-  const { connection } = useConnection()
+  const connection = new Connection(process.env.NEXT_PUBLIC_RPC!)
   const [nfts, setNfts] = useState<Nft[]>([])
   const [nftType, setNftType] = useState<'' | 'video' | 'image' | 'other'>('')
   const [step, setStep] = useState<number>(0)
