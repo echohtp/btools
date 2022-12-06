@@ -16,6 +16,7 @@ import {
     SolletExtensionWalletAdapter,
     SolletWalletAdapter,
     TorusWalletAdapter,
+    BackpackWalletAdapter
 } from '@solana/wallet-adapter-wallets';
 import {
     WalletModalProvider
@@ -46,6 +47,7 @@ function MyApp({ Component, pageProps }: AppProps) {
    // of wallets that your users connect to will be loaded.
    const wallets = useMemo(
        () => [
+           new BackpackWalletAdapter(),
            new PhantomWalletAdapter(),
            new SlopeWalletAdapter(),
            new SolflareWalletAdapter({ network }),
