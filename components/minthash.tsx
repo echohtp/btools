@@ -24,6 +24,7 @@ const MintHash: NextPage = () => {
   const [nfts, setNfts] = useState<Nft[]>([])
   const [sending, setSending] = useState<Nft[]>([])
   const [search, setSearch] = useState<string>("")
+  const [loading, setLoading] = useState<boolean>(false)
 
   const downloadFile = (all: boolean = false) => {
     const element = document.createElement('a')
@@ -59,6 +60,7 @@ const MintHash: NextPage = () => {
   `
 
   useMemo(() => {
+    setLoading(true)
     if (publicKey?.toBase58()) {
       client
         .query({
@@ -70,8 +72,10 @@ const MintHash: NextPage = () => {
           }
         })
         .then(res => setNfts(res.data.nfts))
+        setLoading(false)
     } else {
       setNfts([])
+      setLoading(false)
     }
   }, [publicKey, GET_NFTS])
 
@@ -100,6 +104,7 @@ const MintHash: NextPage = () => {
           </div>
           <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {/* {nfts.filter((n)=>(n.name.includes(search))).map(n => ( */}
+            {loading && <><h1 className='text-2xl'>LOADING....</h1></>}
             {nfts.map(n => (
               <NftRow
                 owner={n.owner.address}

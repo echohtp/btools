@@ -10,7 +10,7 @@ import React from 'react'
 import { NftRow } from './nftRow'
 import { PublicKey } from '@solana/web3.js'
 import * as ga from '../lib/ga'
- 
+
 const HolderSnapshot = () => {
   interface Nft {
     mintAddress: string
@@ -25,6 +25,7 @@ const HolderSnapshot = () => {
   const [sending, setSending] = useState<Nft[]>([])
   const [search, setSearch] = useState<string>('')
   const [viewer, setViewer] = useState('')
+  const [loading, setLoading] = useState<boolean>(false)
 
   const downloadFile = (all: boolean = false) => {
     const element = document.createElement('a')
@@ -47,8 +48,8 @@ const HolderSnapshot = () => {
   }
 
   const GET_NFTS = gql`
-  query GetNfts($owners: [PublicKey!], $limit: Int!, $offset: Int!) {
-    nfts(creators: $owners, limit: $limit, offset: $offset) {
+  query GetNfts($creators: [PublicKey!], $limit: Int!, $offset: Int!) {
+    nfts(creators: $creators, limit: $limit, offset: $offset) {
       address
       mintAddress
       name
@@ -63,44 +64,52 @@ const HolderSnapshot = () => {
   }
 `
 
-useMemo(() => {
-  try {
-    let searchKey = new PublicKey(viewer)
-    client
-      .query({
-        query: GET_NFTS,
-        variables: {
-          creators: [publicKey?.toBase58()],
-          offset: 0,
-          limit: 10000
-        }
-      })
-      .then(res => setNfts(res.data.nfts))
-      ga.event({
-        action: 'viewer_load',
-        params: { who: viewer }
-      })
-  } catch (e:any) {
-    if (publicKey) {
+  useMemo(() => {
+    setLoading(true)
+    try {
+      let searchKey = new PublicKey(viewer)
       client
         .query({
           query: GET_NFTS,
           variables: {
-            owners: [publicKey?.toBase58()],
+            creators: [searchKey],
             offset: 0,
             limit: 10000
           }
         })
-        .then(res => setNfts(res.data.nfts))
-        ga.event({
-          action: 'viewer_load',
-          params: { who:  publicKey?.toBase58() }
+        .then(res => {
+          setNfts(res.data.nfts)
+          setLoading(false)
+          ga.event({
+            action: 'viewer_load',
+            params: { who: viewer }
+          })
         })
-    } else {
-      setNfts([])
+    } catch (e: any) {
+      if (publicKey) {
+        client
+          .query({
+            query: GET_NFTS,
+            variables: {
+              creators: [publicKey?.toBase58()],
+              offset: 0,
+              limit: 10000
+            }
+          })
+          .then(res => {
+            setNfts(res.data.nfts)
+            setLoading(false)
+            ga.event({
+              action: 'viewer_load',
+              params: { who: publicKey?.toBase58() }
+            })
+          })
+      } else {
+        setNfts([])
+        setLoading(false)
+      }
     }
-  }
-}, [publicKey, GET_NFTS, viewer])
+  }, [publicKey, GET_NFTS, viewer])
 
   return (
     <div>
@@ -109,18 +118,18 @@ useMemo(() => {
         <div className='drawer-content'>
 
           <div className='container px-4'>
-          <div className='w-full mb-4'>
-            {/* <input
+            <div className='w-full mb-4'>
+              <input
               type='text'
               placeholder='Search for this creator wallet pubkey...'
               className='w-11/12 input input-bordered input-secondary'
               onChange={e => setViewer(e.target.value)}
-            /> */}
-            {sending.length > 0 ? <button onClick={()=>{
-              //@ts-ignore  
-              document.getElementById("my-drawer").checked = true
-            }} className="mx-3 btn btn-secondary">{sending.length}</button> : <button className="mx-3 btn btn-secondary">{sending.length}</button> }
-          </div>
+            />
+              {sending.length > 0 ? <button onClick={() => {
+                //@ts-ignore  
+                document.getElementById("my-drawer").checked = true
+              }} className="mx-3 btn btn-secondary">{sending.length}</button> : <button className="mx-3 btn btn-secondary">{sending.length}</button>}
+            </div>
             {/* <div className='w-full mb-4'>
               <input
                 type='text'
@@ -136,6 +145,7 @@ useMemo(() => {
               </button>
             </div> */}
             <div className='grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+              {loading && <><h1>Loading....</h1></>}
               {nfts
                 // .filter(n => n.name.toLowerCase().includes(search.toLowerCase()))
                 .map(n => (
@@ -194,7 +204,7 @@ useMemo(() => {
                 <li key={Math.random()}>
                   <button
                     className='block text-white btn btn-primary'
-                    onClick={()=>downloadFile()}
+                    onClick={() => downloadFile()}
                   >
                     Download JSON File
                   </button>
