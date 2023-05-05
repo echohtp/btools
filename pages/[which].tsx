@@ -107,36 +107,7 @@ const Home: NextPage = () => {
   }
 
   const [nfts, setNfts] = useState<Nft[]>([])
-  const [allowed, setAllowed] = useState(false)
-
-  useMemo(() => {
-    if (publicKey?.toBase58()) {
-      client
-        .query({
-          query: GET_ACCESS,
-          variables: {
-            owners: [publicKey?.toBase58()],
-            creators: [
-              '232PpcrPc6Kz7geafvbRzt5HnHP4kX88yvzUCN69WXQC',
-              '465Av5qxktim1iN9p54k41MbRGPe2nqCfyVYwB2EF84J',
-              '55ws2G7DH9WCN4SE8uH7ohQyvqM69NPPhxhV1ExVnJ4A',
-              '7R3XCk3wkUXwiH9VtejXJvHnjhPeVaEs3MPxHdKwZwP8'
-            ],
-            offset: 0,
-            limit: 10000
-          }
-        })
-        .then((res: any) => {
-          if (res.data.nfts && res.data.nfts.length > 0) {
-            setNfts(res.data.nfts)
-            setAllowed(true)
-          }
-        })
-    } else {
-      setNfts([])
-      setAllowed(false)
-    }
-  }, [publicKey, GET_ACCESS])
+  const [allowed, setAllowed] = useState(true)
 
   return (
     <div>
